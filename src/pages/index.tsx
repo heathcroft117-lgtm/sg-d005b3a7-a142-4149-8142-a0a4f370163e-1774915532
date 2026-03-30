@@ -149,9 +149,9 @@ export default function HomePage() {
               <h3 className="apex-heading text-sm uppercase tracking-wider text-muted-foreground">
                 Recent Catches
               </h3>
-              <Button variant="ghost" size="sm" asChild>
-                <a href="/logbook">View All</a>
-              </Button>
+              <Link href="/logbook" className="text-sm font-semibold text-primary hover:text-primary/80 transition-colors">
+                View All
+              </Link>
             </div>
 
             {recentCatches.length > 0 ? (

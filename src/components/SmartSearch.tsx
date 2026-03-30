@@ -1,47 +1,33 @@
 import { useState } from "react";
-import { Search, TrendingUp, MapPin, Fish, BookOpen, Trophy } from "lucide-react";
+import { Search, TrendingUp, MapPin, Fish, BookOpen, Trophy, Clock, Brain } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-
-interface SearchResult {
-  type: "water" | "species" | "catch" | "trip" | "achievement";
-  title: string;
-  subtitle: string;
-  url: string;
-}
 
 export function SmartSearch() {
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
-  const recentSearches = [
-    { type: "water" as const, title: "Lake Travis", subtitle: "Reservoir • 2.4 mi", url: "/waters" },
-    { type: "species" as const, title: "Largemouth Bass", subtitle: "Black Bass Family", url: "/species" },
-  ];
-
   const quickActions = [
-    { label: "Log Catch", icon: Fish, url: "/logbook" },
-    { label: "View Map", icon: MapPin, url: "/map" },
-    { label: "Check Forecast", icon: TrendingUp, url: "/forecast" },
+    { icon: Fish, label: "Log Catch", href: "/logbook", color: "text-primary" },
+    { icon: MapPin, label: "Open Atlas", href: "/map", color: "text-accent" },
+    { icon: TrendingUp, label: "Check Forecast", href: "/forecast", color: "text-success" },
+    { icon: Trophy, label: "View Tournaments", href: "/tournaments", color: "text-warning" },
   ];
 
-  const getIcon = (type: SearchResult["type"]) => {
-    switch (type) {
-      case "water": return MapPin;
-      case "species": return Fish;
-      case "catch": return Fish;
-      case "trip": return BookOpen;
-      case "achievement": return Trophy;
-      default: return Search;
-    }
-  };
+  const recentSearches = [
+    { label: "Largemouth Bass regulations", type: "regulation", icon: BookOpen },
+    { label: "Lake Travis access points", type: "location", icon: MapPin },
+    { label: "Best bait for crappie", type: "intelligence", icon: Brain },
+  ];
 
   return (
     <div className="relative">
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search waters, species, catches..."
+          type="text"
+          placeholder="Search waters, species, regulations..."
+          className="pl-10 apex-data bg-muted/30 border-border/50 focus:border-primary/50"
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
@@ -49,64 +35,73 @@ export function SmartSearch() {
           }}
           onFocus={() => setIsOpen(true)}
           onBlur={() => setTimeout(() => setIsOpen(false), 200)}
-          className="pl-10 h-12 bg-card border-border"
         />
       </div>
 
       {isOpen && (
-        <Card className="absolute top-full mt-2 w-full tactical-card p-2 shadow-2xl z-50 animate-in slide-in-from-top-2 duration-200">
+        <Card className="absolute top-full left-0 right-0 mt-2 p-4 apex-card border-border/50 z-50 max-h-96 overflow-y-auto">
           {query.length === 0 ? (
-            <div className="p-2">
-              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2 px-2">
-                Quick Actions
-              </div>
-              <div className="space-y-1">
-                {quickActions.map((action, idx) => {
-                  const Icon = action.icon;
-                  return (
-                    <a
-                      key={idx}
-                      href={action.url}
-                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors"
-                    >
-                      <Icon className="h-4 w-4 text-primary" />
-                      <span className="text-sm font-medium">{action.label}</span>
-                    </a>
-                  );
-                })}
+            <div className="space-y-4">
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">
+                  Quick Actions
+                </h4>
+                <div className="grid grid-cols-2 gap-2">
+                  {quickActions.map((action, idx) => {
+                    const Icon = action.icon;
+                    return (
+                      <a
+                        key={idx}
+                        href={action.href}
+                        className="flex items-center gap-2 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
+                      >
+                        <Icon className={`h-4 w-4 ${action.color}`} />
+                        <span className="text-sm font-semibold">{action.label}</span>
+                      </a>
+                    );
+                  })}
+                </div>
               </div>
 
               {recentSearches.length > 0 && (
-                <>
-                  <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2 px-2 mt-4">
-                    Recent
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Clock className="h-3 w-3 text-muted-foreground" />
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                      Recent
+                    </h4>
                   </div>
-                  <div className="space-y-1">
-                    {recentSearches.map((result, idx) => {
-                      const Icon = getIcon(result.type);
+                  <div className="space-y-2">
+                    {recentSearches.map((search, idx) => {
+                      const Icon = search.icon;
                       return (
-                        <a
+                        <button
                           key={idx}
-                          href={result.url}
-                          className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors"
+                          className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-muted/30 transition-colors text-left"
                         >
                           <Icon className="h-4 w-4 text-muted-foreground" />
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium truncate">{result.title}</div>
-                            <div className="text-xs text-muted-foreground truncate">{result.subtitle}</div>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium">{search.label}</p>
+                            <p className="text-xs text-muted-foreground">{search.type}</p>
                           </div>
-                        </a>
+                        </button>
                       );
                     })}
                   </div>
-                </>
+                </div>
               )}
             </div>
           ) : (
-            <div className="p-2">
-              <div className="text-sm text-muted-foreground text-center py-8">
-                Search results for "{query}"
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 mb-2">
+                <Brain className="h-4 w-4 text-primary" />
+                <span className="text-xs font-bold uppercase tracking-wider text-primary">
+                  AI Intelligence
+                </span>
               </div>
+              <p className="text-sm text-muted-foreground">
+                Searching for "{query}" across waters, species, regulations, and catch history...
+              </p>
             </div>
           )}
         </Card>
