@@ -1,248 +1,336 @@
+import { useState } from "react";
 import { SEO } from "@/components/SEO";
 import { Layout } from "@/components/Layout";
-import { Plus, Calendar, MapPin, Clock, Fish, Camera, TrendingUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  MapPin, 
+  Calendar, 
+  Clock,
+  Fish,
+  TrendingUp,
+  Users,
+  Plus,
+  Target,
+  Droplets,
+  Wind,
+  Gauge,
+  CheckCircle2
+} from "lucide-react";
 
 export default function TripsPage() {
-  const activeTrip = {
-    id: 1,
-    name: "Morning Bass Session",
-    location: "Lake Travis - Point 7",
-    startTime: "6:15 AM",
-    duration: "2h 45m",
-    catches: 3,
-    photos: 2,
-    conditions: {
-      temp: 68,
-      wind: "5 mph NE",
-      pressure: "30.12 inHg",
-    },
-  };
+  const [activeTab, setActiveTab] = useState("upcoming");
 
-  const recentTrips = [
+  const upcomingTrips = [
     {
-      id: 2,
-      name: "Evening Crappie Run",
-      location: "Lake Travis - Dam Area",
-      date: "Mar 28, 2026",
-      duration: "3h 20m",
+      id: "1",
+      name: "Weekend Bass Assault",
+      water: "Lake Travis",
+      date: "2026-04-05",
+      time: "05:30 AM",
+      duration: "6 hours",
+      targetSpecies: ["Largemouth Bass", "Smallmouth Bass"],
+      forecast: { biteScore: 8.2, conditions: "Excellent" },
+      companions: ["Mike R.", "Sarah K."],
+      status: "confirmed",
+    },
+    {
+      id: "2",
+      name: "White Bass Spring Run",
+      water: "Lake Georgetown",
+      date: "2026-03-28",
+      time: "06:00 AM",
+      duration: "4 hours",
+      targetSpecies: ["White Bass"],
+      forecast: { biteScore: 9.1, conditions: "Prime" },
+      companions: [],
+      status: "planned",
+    },
+  ];
+
+  const pastTrips = [
+    {
+      id: "3",
+      name: "Morning Trophy Hunt",
+      water: "Lake Travis",
+      date: "2026-03-15",
+      duration: "5 hours",
       catches: 8,
-      species: ["Crappie", "White Bass"],
-      photos: 5,
-      success: "High",
+      species: 3,
+      totalWeight: 24.5,
+      biggestFish: 6.8,
+      cpue: 1.6,
+      conditions: { temp: 68, pressure: 30.12, wind: "SE 8mph" },
+      success: "high",
     },
     {
-      id: 3,
-      name: "All-Day Tournament",
-      location: "Lake Travis - Multiple Points",
-      date: "Mar 24, 2026",
-      duration: "8h 15m",
-      catches: 12,
-      species: ["Largemouth Bass", "Spotted Bass"],
-      photos: 15,
-      success: "Very High",
-    },
-    {
-      id: 4,
-      name: "Shore Fishing",
-      location: "Town Lake Access",
-      date: "Mar 20, 2026",
-      duration: "1h 45m",
-      catches: 2,
-      species: ["Catfish"],
-      photos: 1,
-      success: "Moderate",
+      id: "4",
+      name: "Striper Search",
+      water: "Lake Georgetown",
+      date: "2026-03-08",
+      duration: "6 hours",
+      catches: 4,
+      species: 2,
+      totalWeight: 48.2,
+      biggestFish: 18.4,
+      cpue: 0.67,
+      conditions: { temp: 62, pressure: 29.98, wind: "N 12mph" },
+      success: "moderate",
     },
   ];
 
   return (
     <>
       <SEO 
-        title="Trips - FishIQ"
-        description="Fishing trip tracker and history"
+        title="Trip Manager - Apex" 
+        description="Plan fishing trips with forecast integration and track detailed outing records"
       />
       <Layout>
-        <div className="container mx-auto px-4 pt-20 md:pt-24 pb-8 max-w-4xl">
-          <div className="flex items-center justify-between mb-6">
+        <div className="container mx-auto px-4 py-6 space-y-6">
+          {/* Header */}
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-heading font-bold mb-1">Trips</h1>
-              <p className="text-sm text-muted-foreground">28 trips • 142 catches • 85% success rate</p>
+              <h1 className="text-3xl font-bold apex-heading mb-1">Trip Manager</h1>
+              <p className="text-sm text-muted-foreground apex-data">
+                Plan • Track • Analyze
+              </p>
             </div>
             <Button className="gap-2">
               <Plus className="h-4 w-4" />
-              <span className="hidden sm:inline">Start Trip</span>
+              <span className="hidden sm:inline">Plan Trip</span>
             </Button>
           </div>
 
-          {/* Active Trip Banner */}
-          {activeTrip && (
-            <Card className="tactical-card p-6 mb-6 border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <Badge className="bg-primary text-primary-foreground animate-pulse">
-                      Active Trip
-                    </Badge>
-                  </div>
-                  <h2 className="text-2xl font-heading font-bold mb-1">{activeTrip.name}</h2>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <MapPin className="h-4 w-4" />
-                    <span>{activeTrip.location}</span>
-                  </div>
-                </div>
-                <Button size="sm" variant="destructive">
-                  End Trip
-                </Button>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4 mb-4">
-                <div className="text-center p-3 rounded-lg bg-card/50">
-                  <Clock className="h-5 w-5 mx-auto mb-1 text-primary" />
-                  <div className="font-heading font-bold text-lg">{activeTrip.duration}</div>
-                  <div className="text-xs text-muted-foreground">Duration</div>
-                </div>
-                <div className="text-center p-3 rounded-lg bg-card/50">
-                  <Fish className="h-5 w-5 mx-auto mb-1 text-accent" />
-                  <div className="font-heading font-bold text-lg">{activeTrip.catches}</div>
-                  <div className="text-xs text-muted-foreground">Catches</div>
-                </div>
-                <div className="text-center p-3 rounded-lg bg-card/50">
-                  <Camera className="h-5 w-5 mx-auto mb-1 text-success" />
-                  <div className="font-heading font-bold text-lg">{activeTrip.photos}</div>
-                  <div className="text-xs text-muted-foreground">Photos</div>
-                </div>
-              </div>
-
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="flex-1 gap-2">
-                  <Fish className="h-4 w-4" />
-                  Log Catch
-                </Button>
-                <Button variant="outline" size="sm" className="flex-1 gap-2">
-                  <Camera className="h-4 w-4" />
-                  Add Photo
-                </Button>
-                <Button variant="outline" size="sm" className="flex-1 gap-2">
-                  <MapPin className="h-4 w-4" />
-                  Mark Spot
-                </Button>
-              </div>
+          {/* Trip Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <Card className="apex-card p-4">
+              <Calendar className="h-5 w-5 text-primary mb-2" />
+              <p className="text-2xl font-bold apex-data mb-1">24</p>
+              <p className="text-xs text-muted-foreground">Total Trips</p>
             </Card>
-          )}
-
-          {/* Monthly Summary */}
-          <Card className="tactical-card p-6 mb-6">
-            <h3 className="text-lg font-heading font-semibold mb-4">This Month</h3>
-            <div className="grid grid-cols-4 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-heading font-bold text-primary">8</div>
-                <div className="text-xs text-muted-foreground mt-1">Trips</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-heading font-bold text-accent">42</div>
-                <div className="text-xs text-muted-foreground mt-1">Catches</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-heading font-bold text-bite-strong">28h</div>
-                <div className="text-xs text-muted-foreground mt-1">Time</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-heading font-bold text-success">89%</div>
-                <div className="text-xs text-muted-foreground mt-1">Success</div>
-              </div>
-            </div>
-          </Card>
-
-          {/* Trip History */}
-          <div className="mb-4">
-            <h2 className="text-xl font-heading font-semibold mb-4">Recent Trips</h2>
+            <Card className="apex-card p-4">
+              <Fish className="h-5 w-5 text-success mb-2" />
+              <p className="text-2xl font-bold apex-data mb-1">127</p>
+              <p className="text-xs text-muted-foreground">Total Catches</p>
+            </Card>
+            <Card className="apex-card p-4">
+              <Target className="h-5 w-5 text-primary mb-2" />
+              <p className="text-2xl font-bold apex-data mb-1">2.4</p>
+              <p className="text-xs text-muted-foreground">Avg CPUE</p>
+            </Card>
+            <Card className="apex-card p-4">
+              <TrendingUp className="h-5 w-5 text-success mb-2" />
+              <p className="text-2xl font-bold apex-data mb-1">+18%</p>
+              <p className="text-xs text-muted-foreground">Success Rate</p>
+            </Card>
           </div>
 
-          <div className="space-y-4">
-            {recentTrips.map((trip) => (
-              <Card key={trip.id} className="tactical-card p-4 hover:border-primary/50 transition-colors cursor-pointer">
-                <div className="flex items-start justify-between gap-4 mb-3">
-                  <div className="flex-1">
-                    <h3 className="font-heading font-semibold text-lg mb-1">{trip.name}</h3>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-                      <MapPin className="h-3 w-3" />
-                      <span>{trip.location}</span>
+          {/* Trip Tabs */}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="upcoming" className="apex-data">
+                <Calendar className="h-4 w-4 mr-2" />
+                Upcoming ({upcomingTrips.length})
+              </TabsTrigger>
+              <TabsTrigger value="past" className="apex-data">
+                <CheckCircle2 className="h-4 w-4 mr-2" />
+                Past ({pastTrips.length})
+              </TabsTrigger>
+            </TabsList>
+
+            {/* Upcoming Trips */}
+            <TabsContent value="upcoming" className="mt-6 space-y-4">
+              {upcomingTrips.map((trip) => (
+                <Card key={trip.id} className="apex-card p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <h3 className="font-bold text-xl mb-1">{trip.name}</h3>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                        <MapPin className="h-4 w-4" />
+                        <span>{trip.water}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className={`verification-badge ${
+                          trip.status === "confirmed" 
+                            ? "bg-success/20 text-success border-success/30" 
+                            : "bg-warning/20 text-warning border-warning/30"
+                        }`}>
+                          {trip.status.toUpperCase()}
+                        </div>
+                        {trip.companions.length > 0 && (
+                          <div className="px-3 py-1 rounded-full bg-muted/50 text-xs font-semibold apex-data flex items-center gap-1">
+                            <Users className="h-3 w-3" />
+                            {trip.companions.length}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <Calendar className="h-3 w-3" />
-                      <span>{trip.date}</span>
-                      <span>•</span>
-                      <Clock className="h-3 w-3" />
-                      <span>{trip.duration}</span>
+                    <div className="text-right">
+                      <div className="text-3xl font-bold apex-data text-primary mb-1">
+                        {trip.forecast.biteScore}
+                      </div>
+                      <p className="text-xs text-muted-foreground">Bite Score</p>
                     </div>
                   </div>
-                  <Badge 
-                    variant="outline"
-                    className={
-                      trip.success === "Very High" 
-                        ? "bg-success/20 text-success border-success/30" 
-                        : trip.success === "High"
-                        ? "bg-primary/20 text-primary border-primary/30"
-                        : "bg-muted/20 text-muted-foreground border-muted/30"
-                    }
-                  >
-                    {trip.success}
-                  </Badge>
-                </div>
 
-                <div className="flex items-center gap-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Fish className="h-4 w-4 text-accent" />
-                    <span className="font-semibold">{trip.catches}</span>
-                    <span className="text-muted-foreground">catches</span>
+                  {/* Trip Details */}
+                  <div className="grid md:grid-cols-2 gap-4 mb-4">
+                    <div className="intelligence-panel">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Calendar className="h-4 w-4 text-primary" />
+                        <p className="text-xs text-muted-foreground uppercase tracking-wide">Schedule</p>
+                      </div>
+                      <p className="text-sm font-semibold apex-data">
+                        {new Date(trip.date).toLocaleDateString()} • {trip.time}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Duration: {trip.duration}
+                      </p>
+                    </div>
+
+                    <div className="intelligence-panel">
+                      <div className="flex items-center gap-2 mb-2">
+                        <TrendingUp className="h-4 w-4 text-primary" />
+                        <p className="text-xs text-muted-foreground uppercase tracking-wide">Forecast</p>
+                      </div>
+                      <p className="text-sm font-semibold text-success">
+                        {trip.forecast.conditions}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Bite window analysis
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Camera className="h-4 w-4 text-primary" />
-                    <span className="font-semibold">{trip.photos}</span>
-                    <span className="text-muted-foreground">photos</span>
+
+                  {/* Target Species */}
+                  <div className="mb-4">
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Target Species</p>
+                    <div className="flex flex-wrap gap-2">
+                      {trip.targetSpecies.map((species) => (
+                        <span key={species} className="px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-xs font-semibold apex-data">
+                          {species}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                {trip.species.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-1">
-                    {trip.species.map((species, idx) => (
-                      <span key={idx} className="px-2 py-1 rounded-full bg-muted/30 text-xs font-medium">
-                        {species}
-                      </span>
-                    ))}
+                  {/* Companions */}
+                  {trip.companions.length > 0 && (
+                    <div className="mb-4">
+                      <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Fishing With</p>
+                      <div className="flex flex-wrap gap-2">
+                        {trip.companions.map((companion) => (
+                          <span key={companion} className="px-3 py-1 rounded-full bg-muted/50 text-xs font-semibold apex-data">
+                            {companion}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Actions */}
+                  <div className="flex gap-3">
+                    <Button className="flex-1 gap-2">
+                      <CheckCircle2 className="h-4 w-4" />
+                      Start Trip
+                    </Button>
+                    <Button variant="outline" className="gap-2">
+                      Edit Details
+                    </Button>
                   </div>
-                )}
-              </Card>
-            ))}
-          </div>
+                </Card>
+              ))}
+            </TabsContent>
 
-          {/* Load More */}
-          <div className="mt-6 text-center">
-            <Button variant="outline">Load More Trips</Button>
-          </div>
+            {/* Past Trips */}
+            <TabsContent value="past" className="mt-6 space-y-4">
+              {pastTrips.map((trip) => (
+                <Card key={trip.id} className="apex-card p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <h3 className="font-bold text-xl mb-1">{trip.name}</h3>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                        <MapPin className="h-4 w-4" />
+                        <span>{trip.water}</span>
+                        <span>•</span>
+                        <span className="apex-data">{new Date(trip.date).toLocaleDateString()}</span>
+                      </div>
+                      <div className={`verification-badge ${
+                        trip.success === "high" 
+                          ? "bg-success/20 text-success border-success/30" 
+                          : trip.success === "moderate"
+                          ? "bg-warning/20 text-warning border-warning/30"
+                          : "bg-destructive/20 text-destructive border-destructive/30"
+                      }`}>
+                        {trip.success.toUpperCase()} SUCCESS
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-3xl font-bold apex-data text-primary mb-1">
+                        {trip.cpue}
+                      </div>
+                      <p className="text-xs text-muted-foreground">CPUE</p>
+                    </div>
+                  </div>
 
-          {/* Stats Insight */}
-          <Card className="tactical-card p-4 mt-6">
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                <TrendingUp className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <h3 className="font-heading font-semibold mb-1">Trip Insight</h3>
-                <p className="text-sm text-muted-foreground">
-                  Your most successful trips average 5.1 CPUE and last between 2-4 hours. 
-                  Morning trips show 23% higher success rates than afternoon sessions.
-                </p>
-              </div>
-            </div>
-          </Card>
+                  {/* Trip Stats */}
+                  <div className="grid grid-cols-4 gap-3 mb-4">
+                    <div className="intelligence-panel text-center">
+                      <Fish className="h-5 w-5 text-primary mx-auto mb-2" />
+                      <p className="text-lg font-bold apex-data mb-1">{trip.catches}</p>
+                      <p className="text-xs text-muted-foreground">Catches</p>
+                    </div>
+                    <div className="intelligence-panel text-center">
+                      <Target className="h-5 w-5 text-primary mx-auto mb-2" />
+                      <p className="text-lg font-bold apex-data mb-1">{trip.species}</p>
+                      <p className="text-xs text-muted-foreground">Species</p>
+                    </div>
+                    <div className="intelligence-panel text-center">
+                      <TrendingUp className="h-5 w-5 text-success mx-auto mb-2" />
+                      <p className="text-lg font-bold apex-data mb-1">{trip.totalWeight}</p>
+                      <p className="text-xs text-muted-foreground">Total (lbs)</p>
+                    </div>
+                    <div className="intelligence-panel text-center">
+                      <Fish className="h-5 w-5 text-warning mx-auto mb-2" />
+                      <p className="text-lg font-bold apex-data mb-1">{trip.biggestFish}</p>
+                      <p className="text-xs text-muted-foreground">Big (lbs)</p>
+                    </div>
+                  </div>
+
+                  {/* Conditions */}
+                  <div className="intelligence-panel">
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Conditions Logged</p>
+                    <div className="grid grid-cols-3 gap-3 text-xs">
+                      <div className="flex items-center gap-2">
+                        <Droplets className="h-4 w-4 text-primary" />
+                        <span className="apex-data">{trip.conditions.temp}°F</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Gauge className="h-4 w-4 text-primary" />
+                        <span className="apex-data">{trip.conditions.pressure}"</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Wind className="h-4 w-4 text-primary" />
+                        <span className="apex-data">{trip.conditions.wind}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <Button variant="outline" className="w-full mt-4 gap-2">
+                    <Fish className="h-4 w-4" />
+                    View Full Trip Report
+                  </Button>
+                </Card>
+              ))}
+            </TabsContent>
+          </Tabs>
         </div>
 
-        {/* FAB for Quick Trip Start */}
-        <button className="action-fab flex items-center justify-center">
-          <Plus className="h-6 w-6" />
+        {/* FAB - Quick Trip Start */}
+        <button className="fixed bottom-20 md:bottom-8 right-4 w-14 h-14 rounded-full bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl apex-glow transition-all active:scale-95 flex items-center justify-center z-40">
+          <Plus className="h-6 w-6 text-apex-obsidian" />
         </button>
       </Layout>
     </>

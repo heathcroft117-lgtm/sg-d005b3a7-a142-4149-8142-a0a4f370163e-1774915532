@@ -1,85 +1,114 @@
+import { useState } from "react";
 import { SEO } from "@/components/SEO";
 import { Layout } from "@/components/Layout";
-import { Plus, Trophy, Users, Calendar, Target, MapPin, Clock, Camera, CheckCircle2, AlertCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  Trophy, 
+  Users, 
+  Calendar, 
+  MapPin, 
+  Fish, 
+  Award,
+  CheckCircle2,
+  Clock,
+  Camera,
+  Shield,
+  AlertTriangle,
+  Lock,
+  TrendingUp,
+  Target,
+  Plus
+} from "lucide-react";
 
 export default function TournamentsPage() {
-  const activeTournaments = [
+  const [activeTab, setActiveTab] = useState("live");
+
+  const liveTournaments = [
     {
-      id: 1,
-      name: "Spring Bass Challenge",
-      type: "Invite-Only",
-      startDate: "Apr 1, 2026",
-      endDate: "Apr 30, 2026",
-      participants: 12,
-      status: "Active",
+      id: "1",
+      name: "Highland Lakes Bass Classic",
+      organizer: "Central Texas Anglers",
+      type: "Bass",
+      startDate: "2026-04-15",
+      endDate: "2026-04-30",
+      participants: 24,
+      maxParticipants: 32,
+      species: ["Largemouth Bass", "Smallmouth Bass"],
+      waters: ["Lake Travis", "Lake Austin"],
+      status: "active",
       myRank: 3,
-      targetSpecies: ["Largemouth Bass"],
-      scoringRule: "Total Weight",
-      myScore: "28.4 lbs",
-      leaderScore: "32.1 lbs",
+      myEntries: 5,
+      leaderTotal: 28.4,
+      myTotal: 24.8,
+    },
+    {
+      id: "2",
+      name: "White Bass Spring Run Challenge",
+      organizer: "Austin Fishing Club",
+      type: "White Bass",
+      startDate: "2026-03-20",
+      endDate: "2026-04-10",
+      participants: 18,
+      maxParticipants: 25,
+      species: ["White Bass"],
+      waters: ["Lake Travis"],
+      status: "active",
+      myRank: 7,
+      myEntries: 3,
+      leaderTotal: 42.5,
+      myTotal: 31.2,
     },
   ];
 
   const upcomingTournaments = [
     {
-      id: 2,
-      name: "Lake Travis Multi-Species Derby",
-      type: "Private Club",
-      startDate: "May 15, 2026",
-      duration: "1 Day",
-      participants: 8,
-      targetSpecies: ["Bass", "Crappie", "Catfish"],
-      entryFee: "Free",
-    },
-    {
-      id: 3,
-      name: "Summer Slam Tournament",
-      type: "Invite-Only",
-      startDate: "Jun 10, 2026",
-      duration: "2 Weeks",
-      participants: 15,
-      targetSpecies: ["Largemouth Bass"],
-      entryFee: "Free",
+      id: "3",
+      name: "Summer Striper Showdown",
+      organizer: "Lake Travis Guides",
+      type: "Striped Bass",
+      startDate: "2026-06-01",
+      endDate: "2026-06-30",
+      participants: 0,
+      maxParticipants: 40,
+      species: ["Striped Bass"],
+      waters: ["Lake Travis", "Lake Georgetown"],
+      status: "registration",
+      entryFee: "$25",
+      prizes: "1st: $500, 2nd: $250, 3rd: $100",
     },
   ];
 
-  const pastResults = [
+  const pastTournaments = [
     {
-      id: 4,
-      name: "Winter Bass Challenge",
-      endDate: "Feb 28, 2026",
-      myRank: 2,
-      totalParticipants: 10,
-      myScore: "42.8 lbs",
-      verified: true,
-    },
-    {
-      id: 5,
-      name: "January Multi-Species",
-      endDate: "Jan 31, 2026",
-      myRank: 5,
-      totalParticipants: 12,
-      myScore: "18 fish",
-      verified: true,
+      id: "4",
+      name: "Winter Bass Invitational",
+      organizer: "Highland Lakes Anglers",
+      endDate: "2026-02-28",
+      finalRank: 2,
+      participants: 28,
+      totalWeight: 31.5,
+      biggestFish: 8.2,
+      status: "completed",
     },
   ];
 
   return (
     <>
       <SEO 
-        title="Tournaments - FishIQ"
-        description="Private fishing tournaments and challenges"
+        title="Competitive Arena - Apex" 
+        description="Private invite-only tournaments with AI verification and secure catch submission"
       />
       <Layout>
-        <div className="container mx-auto px-4 pt-20 md:pt-24 pb-8 max-w-4xl">
-          <div className="flex items-center justify-between mb-6">
+        <div className="container mx-auto px-4 py-6 space-y-6">
+          {/* Header */}
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-heading font-bold mb-1">Tournaments</h1>
-              <p className="text-sm text-muted-foreground">Private competitions and challenges</p>
+              <h1 className="text-3xl font-bold apex-heading mb-1">Competitive Arena</h1>
+              <p className="text-sm text-muted-foreground apex-data">
+                Private Tournaments • Verifiable Results • High Integrity
+              </p>
             </div>
             <Button className="gap-2">
               <Plus className="h-4 w-4" />
@@ -87,177 +116,345 @@ export default function TournamentsPage() {
             </Button>
           </div>
 
-          {/* Tabs for Tournament Views */}
-          <Tabs defaultValue="active" className="mb-6">
-            <TabsList className="grid w-full grid-cols-3 mb-4">
-              <TabsTrigger value="active">Active</TabsTrigger>
-              <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-              <TabsTrigger value="past">Past Results</TabsTrigger>
+          {/* Stats Overview */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <Card className="apex-card p-4">
+              <Trophy className="h-5 w-5 text-primary mb-2" />
+              <p className="text-2xl font-bold apex-data mb-1">12</p>
+              <p className="text-xs text-muted-foreground">Events Entered</p>
+            </Card>
+            <Card className="apex-card p-4">
+              <Award className="h-5 w-5 text-warning mb-2" />
+              <p className="text-2xl font-bold apex-data mb-1">3</p>
+              <p className="text-xs text-muted-foreground">Podium Finishes</p>
+            </Card>
+            <Card className="apex-card p-4">
+              <Target className="h-5 w-5 text-success mb-2" />
+              <p className="text-2xl font-bold apex-data mb-1">94%</p>
+              <p className="text-xs text-muted-foreground">Verification Rate</p>
+            </Card>
+            <Card className="apex-card p-4">
+              <TrendingUp className="h-5 w-5 text-primary mb-2" />
+              <p className="text-2xl font-bold apex-data mb-1">+2</p>
+              <p className="text-xs text-muted-foreground">Rank Improvement</p>
+            </Card>
+          </div>
+
+          {/* Tournament Tabs */}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="live" className="apex-data">
+                <Clock className="h-4 w-4 mr-2" />
+                Live ({liveTournaments.length})
+              </TabsTrigger>
+              <TabsTrigger value="upcoming" className="apex-data">
+                <Calendar className="h-4 w-4 mr-2" />
+                Upcoming ({upcomingTournaments.length})
+              </TabsTrigger>
+              <TabsTrigger value="past" className="apex-data">
+                <Trophy className="h-4 w-4 mr-2" />
+                Past ({pastTournaments.length})
+              </TabsTrigger>
             </TabsList>
 
-            {/* Active Tournaments */}
-            <TabsContent value="active" className="space-y-4">
-              {activeTournaments.map((tournament) => (
-                <Card key={tournament.id} className="tactical-card p-0 overflow-hidden border-primary/30">
-                  <div className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <div className="flex items-center gap-2 mb-2">
-                          <Trophy className="h-5 w-5 text-accent" />
-                          <h2 className="text-xl font-heading font-bold">{tournament.name}</h2>
+            {/* Live Tournaments */}
+            <TabsContent value="live" className="mt-6 space-y-4">
+              {liveTournaments.map((tournament) => (
+                <Card key={tournament.id} className="apex-card p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <h3 className="font-bold text-xl mb-1">{tournament.name}</h3>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Organized by {tournament.organizer}
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <div className="verification-badge bg-success/20 text-success border-success/30">
+                          ACTIVE
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Badge variant="outline" className="bg-success/20 text-success border-success/30">
-                            {tournament.status}
-                          </Badge>
-                          <Badge variant="outline">{tournament.type}</Badge>
+                        <div className="verification-badge bg-primary/20 text-primary border-primary/30">
+                          AI VERIFIED
                         </div>
                       </div>
-                      <Button size="sm" className="gap-2">
-                        <Camera className="h-4 w-4" />
-                        Submit Catch
+                    </div>
+                    <div className="text-right">
+                      <div className="text-3xl font-bold apex-data text-primary mb-1">
+                        #{tournament.myRank}
+                      </div>
+                      <p className="text-xs text-muted-foreground">Your Rank</p>
+                    </div>
+                  </div>
+
+                  {/* Tournament Details */}
+                  <div className="grid md:grid-cols-2 gap-4 mb-4">
+                    <div className="intelligence-panel">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Calendar className="h-4 w-4 text-primary" />
+                        <p className="text-xs text-muted-foreground uppercase tracking-wide">Event Window</p>
+                      </div>
+                      <p className="text-sm font-semibold apex-data">
+                        {new Date(tournament.startDate).toLocaleDateString()} - {new Date(tournament.endDate).toLocaleDateString()}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {Math.ceil((new Date(tournament.endDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))} days remaining
+                      </p>
+                    </div>
+
+                    <div className="intelligence-panel">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Users className="h-4 w-4 text-primary" />
+                        <p className="text-xs text-muted-foreground uppercase tracking-wide">Participants</p>
+                      </div>
+                      <p className="text-sm font-semibold apex-data">
+                        {tournament.participants} / {tournament.maxParticipants}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {tournament.maxParticipants - tournament.participants} spots available
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Species & Waters */}
+                  <div className="space-y-3 mb-4">
+                    <div>
+                      <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Target Species</p>
+                      <div className="flex flex-wrap gap-2">
+                        {tournament.species.map((species) => (
+                          <span key={species} className="px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-xs font-semibold apex-data">
+                            {species}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Approved Waters</p>
+                      <div className="flex flex-wrap gap-2">
+                        {tournament.waters.map((water) => (
+                          <span key={water} className="px-3 py-1 rounded-full bg-muted/50 text-xs font-semibold apex-data">
+                            {water}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Leaderboard Preview */}
+                  <div className="intelligence-panel">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-xs text-muted-foreground uppercase tracking-wide">Current Standing</p>
+                      <Button size="sm" variant="ghost" className="text-xs">
+                        Full Leaderboard
                       </Button>
                     </div>
-
-                    <div className="grid grid-cols-2 gap-4 mb-4 p-4 rounded-lg bg-muted/30">
+                    <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-xs text-muted-foreground mb-1">Your Rank</p>
-                        <p className="text-2xl font-heading font-bold text-primary">#{tournament.myRank}</p>
+                        <p className="text-xs text-muted-foreground mb-1">Leader Total</p>
+                        <p className="text-2xl font-bold apex-data text-primary">{tournament.leaderTotal} lbs</p>
                       </div>
                       <div>
-                        <p className="text-xs text-muted-foreground mb-1">Your Score</p>
-                        <p className="text-2xl font-heading font-bold text-accent">{tournament.myScore}</p>
+                        <p className="text-xs text-muted-foreground mb-1">Your Total</p>
+                        <p className="text-2xl font-bold apex-data">{tournament.myTotal} lbs</p>
+                        <p className="text-xs text-warning mt-1">-{(tournament.leaderTotal - tournament.myTotal).toFixed(1)} lbs behind</p>
                       </div>
                     </div>
+                  </div>
 
-                    <div className="space-y-2 text-sm mb-4">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-muted-foreground">Ends:</span>
-                        <span className="font-medium">{tournament.endDate}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-muted-foreground">Participants:</span>
-                        <span className="font-medium">{tournament.participants}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Target className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-muted-foreground">Target:</span>
-                        <span className="font-medium">{tournament.targetSpecies.join(", ")}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Trophy className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-muted-foreground">Leader:</span>
-                        <span className="font-medium">{tournament.leaderScore}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm" className="flex-1">View Leaderboard</Button>
-                      <Button variant="outline" size="sm" className="flex-1">Tournament Rules</Button>
-                    </div>
+                  {/* Actions */}
+                  <div className="flex gap-3 mt-4">
+                    <Button className="flex-1 gap-2">
+                      <Camera className="h-4 w-4" />
+                      Submit Catch
+                    </Button>
+                    <Button variant="outline" className="gap-2">
+                      <Trophy className="h-4 w-4" />
+                      View Details
+                    </Button>
                   </div>
                 </Card>
               ))}
-
-              {activeTournaments.length === 0 && (
-                <Card className="tactical-card p-8 text-center">
-                  <Trophy className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-muted-foreground mb-4">No active tournaments</p>
-                  <Button>Create Your First Event</Button>
-                </Card>
-              )}
             </TabsContent>
 
             {/* Upcoming Tournaments */}
-            <TabsContent value="upcoming" className="space-y-4">
+            <TabsContent value="upcoming" className="mt-6 space-y-4">
               {upcomingTournaments.map((tournament) => (
-                <Card key={tournament.id} className="tactical-card p-6 hover:border-primary/50 transition-colors">
+                <Card key={tournament.id} className="apex-card p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h3 className="text-lg font-heading font-semibold mb-2">{tournament.name}</h3>
-                      <div className="flex items-center gap-2 mb-3">
-                        <Badge variant="outline">{tournament.type}</Badge>
-                        <Badge variant="outline" className="bg-muted/30">{tournament.entryFee}</Badge>
+                      <h3 className="font-bold text-xl mb-1">{tournament.name}</h3>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Organized by {tournament.organizer}
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <div className="verification-badge bg-warning/20 text-warning border-warning/30">
+                          REGISTRATION OPEN
+                        </div>
+                        {tournament.entryFee && (
+                          <div className="px-3 py-1 rounded-full bg-muted/50 text-xs font-semibold apex-data">
+                            {tournament.entryFee}
+                          </div>
+                        )}
                       </div>
                     </div>
-                    <Button variant="outline" size="sm">View Details</Button>
+                    <Lock className="h-5 w-5 text-muted-foreground" />
                   </div>
 
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-muted-foreground">Starts:</span>
-                      <span className="font-medium">{tournament.startDate}</span>
+                  {/* Tournament Details */}
+                  <div className="grid md:grid-cols-2 gap-4 mb-4">
+                    <div className="intelligence-panel">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Calendar className="h-4 w-4 text-primary" />
+                        <p className="text-xs text-muted-foreground uppercase tracking-wide">Event Dates</p>
+                      </div>
+                      <p className="text-sm font-semibold apex-data">
+                        {new Date(tournament.startDate).toLocaleDateString()} - {new Date(tournament.endDate).toLocaleDateString()}
+                      </p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-muted-foreground">Duration:</span>
-                      <span className="font-medium">{tournament.duration}</span>
+
+                    <div className="intelligence-panel">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Users className="h-4 w-4 text-primary" />
+                        <p className="text-xs text-muted-foreground uppercase tracking-wide">Capacity</p>
+                      </div>
+                      <p className="text-sm font-semibold apex-data">
+                        {tournament.maxParticipants} max participants
+                      </p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Users className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-muted-foreground">Participants:</span>
-                      <span className="font-medium">{tournament.participants}</span>
+                  </div>
+
+                  {/* Species & Waters */}
+                  <div className="space-y-3 mb-4">
+                    <div>
+                      <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Target Species</p>
+                      <div className="flex flex-wrap gap-2">
+                        {tournament.species.map((species) => (
+                          <span key={species} className="px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-xs font-semibold apex-data">
+                            {species}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Target className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-muted-foreground">Species:</span>
-                      <span className="font-medium">{tournament.targetSpecies.join(", ")}</span>
+                    <div>
+                      <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Approved Waters</p>
+                      <div className="flex flex-wrap gap-2">
+                        {tournament.waters.map((water) => (
+                          <span key={water} className="px-3 py-1 rounded-full bg-muted/50 text-xs font-semibold apex-data">
+                            {water}
+                          </span>
+                        ))}
+                      </div>
                     </div>
+                  </div>
+
+                  {/* Prize Info */}
+                  {tournament.prizes && (
+                    <div className="intelligence-panel mb-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Trophy className="h-4 w-4 text-warning" />
+                        <p className="text-xs text-muted-foreground uppercase tracking-wide">Prize Pool</p>
+                      </div>
+                      <p className="text-sm font-semibold">{tournament.prizes}</p>
+                    </div>
+                  )}
+
+                  {/* Actions */}
+                  <div className="flex gap-3">
+                    <Button className="flex-1 gap-2">
+                      <CheckCircle2 className="h-4 w-4" />
+                      Register Now
+                    </Button>
+                    <Button variant="outline" className="gap-2">
+                      <Trophy className="h-4 w-4" />
+                      View Rules
+                    </Button>
                   </div>
                 </Card>
               ))}
             </TabsContent>
 
-            {/* Past Results */}
-            <TabsContent value="past" className="space-y-4">
-              {pastResults.map((result) => (
-                <Card key={result.id} className="tactical-card p-6">
+            {/* Past Tournaments */}
+            <TabsContent value="past" className="mt-6 space-y-4">
+              {pastTournaments.map((tournament) => (
+                <Card key={tournament.id} className="apex-card p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h3 className="text-lg font-heading font-semibold mb-2">{result.name}</h3>
-                      <p className="text-sm text-muted-foreground">Ended {result.endDate}</p>
+                      <h3 className="font-bold text-xl mb-1">{tournament.name}</h3>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Organized by {tournament.organizer}
+                      </p>
+                      <p className="text-xs text-muted-foreground apex-data">
+                        Completed {new Date(tournament.endDate).toLocaleDateString()}
+                      </p>
                     </div>
-                    {result.verified && (
-                      <Badge variant="outline" className="bg-success/20 text-success border-success/30">
-                        <CheckCircle2 className="h-3 w-3 mr-1" />
-                        Verified
-                      </Badge>
-                    )}
+                    <div className="text-right">
+                      <div className="flex items-center gap-2 justify-end mb-1">
+                        {tournament.finalRank <= 3 && (
+                          <Trophy className={`h-5 w-5 ${
+                            tournament.finalRank === 1 ? "text-warning" :
+                            tournament.finalRank === 2 ? "text-muted-foreground" :
+                            "text-amber-700"
+                          }`} />
+                        )}
+                        <span className="text-3xl font-bold apex-data">#{tournament.finalRank}</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">Final Rank</p>
+                    </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-4 p-4 rounded-lg bg-muted/30">
-                    <div className="text-center">
-                      <p className="text-xs text-muted-foreground mb-1">Placement</p>
-                      <p className="text-2xl font-heading font-bold text-primary">#{result.myRank}</p>
+                  {/* Final Stats */}
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="intelligence-panel text-center">
+                      <Fish className="h-5 w-5 text-primary mx-auto mb-2" />
+                      <p className="text-lg font-bold apex-data mb-1">{tournament.totalWeight}</p>
+                      <p className="text-xs text-muted-foreground">Total Weight (lbs)</p>
                     </div>
-                    <div className="text-center">
-                      <p className="text-xs text-muted-foreground mb-1">Score</p>
-                      <p className="text-2xl font-heading font-bold text-accent">{result.myScore}</p>
+                    <div className="intelligence-panel text-center">
+                      <Trophy className="h-5 w-5 text-warning mx-auto mb-2" />
+                      <p className="text-lg font-bold apex-data mb-1">{tournament.biggestFish}</p>
+                      <p className="text-xs text-muted-foreground">Big Fish (lbs)</p>
                     </div>
-                    <div className="text-center">
-                      <p className="text-xs text-muted-foreground mb-1">Field</p>
-                      <p className="text-2xl font-heading font-bold text-muted-foreground">{result.totalParticipants}</p>
+                    <div className="intelligence-panel text-center">
+                      <Users className="h-5 w-5 text-primary mx-auto mb-2" />
+                      <p className="text-lg font-bold apex-data mb-1">{tournament.participants}</p>
+                      <p className="text-xs text-muted-foreground">Total Anglers</p>
                     </div>
                   </div>
+
+                  {/* Actions */}
+                  <Button variant="outline" className="w-full mt-4 gap-2">
+                    <Trophy className="h-4 w-4" />
+                    View Full Results
+                  </Button>
                 </Card>
               ))}
             </TabsContent>
           </Tabs>
 
-          {/* Tournament Info Card */}
-          <Card className="tactical-card p-4">
+          {/* Verification System Info */}
+          <Card className="apex-card p-6 border-primary/30">
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                <AlertCircle className="h-5 w-5 text-primary" />
-              </div>
+              <Shield className="h-5 w-5 text-primary shrink-0 mt-0.5" />
               <div>
-                <h3 className="font-heading font-semibold mb-1">Tournament Verification</h3>
-                <p className="text-sm text-muted-foreground">
-                  All tournament catches require photo proof with GPS stamps. Submissions are reviewed by event organizers to ensure fair competition.
+                <h3 className="font-bold mb-2">Multi-Factor Verification System</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  All tournament submissions undergo rigorous automated and manual review to ensure integrity.
                 </p>
+                <div className="grid md:grid-cols-2 gap-3 text-xs">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-success" />
+                    <span>AI Species Identification</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-success" />
+                    <span>GPS Geofencing Validation</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-success" />
+                    <span>Timestamp Authentication</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-success" />
+                    <span>Manual Organizer Review</span>
+                  </div>
+                </div>
               </div>
             </div>
           </Card>
