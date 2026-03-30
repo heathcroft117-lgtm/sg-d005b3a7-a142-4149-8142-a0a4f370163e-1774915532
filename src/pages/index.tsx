@@ -6,6 +6,7 @@ import { QuickActionsCard } from "@/components/dashboard/QuickActionsCard";
 import { Fish, TrendingUp, Clock, MapPin, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import Link from "next/link";
 
 export default function HomePage() {
   const userName = "Captain";
@@ -156,8 +157,9 @@ export default function HomePage() {
             {recentCatches.length > 0 ? (
               <div className="space-y-3">
                 {recentCatches.map((catch_) => (
-                  <div 
+                  <Link
                     key={catch_.id}
+                    href={`/logbook/${catch_.id}`}
                     className="flex items-center gap-4 p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer"
                   >
                     <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-2xl">
@@ -171,7 +173,7 @@ export default function HomePage() {
                       <p className="font-bold apex-data text-primary">{catch_.weight}</p>
                       <p className="text-xs text-muted-foreground">{catch_.time}</p>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             ) : (
