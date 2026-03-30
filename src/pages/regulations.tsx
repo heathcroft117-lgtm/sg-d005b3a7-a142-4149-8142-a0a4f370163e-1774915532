@@ -1,215 +1,379 @@
+import { useState } from "react";
 import { SEO } from "@/components/SEO";
 import { Layout } from "@/components/Layout";
-import { MapPin, AlertCircle, Download, Shield, Calendar, Fish } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  AlertTriangle, 
+  MapPin, 
+  Fish, 
+  Calendar, 
+  Ruler, 
+  Scale, 
+  Download,
+  Target,
+  Lock,
+  CheckCircle2,
+  XCircle
+} from "lucide-react";
 
 export default function RegulationsPage() {
+  const [searchQuery, setSearchQuery] = useState("");
+
   const currentLocation = {
-    waterbody: "Lake Travis",
+    water: "Lake Travis",
     county: "Travis County",
     state: "Texas",
+    coordinates: "30.3922° N, 97.8832° W",
   };
 
-  const activeRegulations = [
+  const regulations = [
     {
       species: "Largemouth Bass",
-      minSize: "14 inches",
-      bagLimit: "5 per day",
-      season: "Open Year-Round",
-      notes: "Only one bass over 16 inches may be retained",
-      status: "active",
+      minSize: 14,
+      maxSize: null,
+      dailyLimit: 5,
+      season: "Year-Round",
+      status: "open",
+      notes: "Only 1 bass over 24 inches may be retained",
+      icon: Fish,
+    },
+    {
+      species: "Smallmouth Bass",
+      minSize: 14,
+      maxSize: null,
+      dailyLimit: 5,
+      season: "Year-Round",
+      status: "open",
+      notes: "Included in 5-bass aggregate daily limit",
+      icon: Fish,
     },
     {
       species: "White Bass",
-      minSize: "10 inches",
-      bagLimit: "25 per day",
-      season: "Open Year-Round",
-      notes: "Combination limit applies with hybrid striped bass",
-      status: "active",
+      minSize: 10,
+      maxSize: null,
+      dailyLimit: 25,
+      season: "Year-Round",
+      status: "open",
+      notes: "No slot limit restrictions",
+      icon: Fish,
     },
     {
-      species: "Channel Catfish",
-      minSize: "12 inches",
-      bagLimit: "25 per day",
-      season: "Open Year-Round",
-      notes: "No special restrictions",
-      status: "active",
+      species: "Striped Bass",
+      minSize: 18,
+      maxSize: null,
+      dailyLimit: 5,
+      season: "Year-Round",
+      status: "open",
+      notes: "Only 1 striped bass over 33 inches may be retained",
+      icon: Fish,
+    },
+    {
+      species: "Catfish (Channel/Blue)",
+      minSize: 12,
+      maxSize: null,
+      dailyLimit: 25,
+      season: "Year-Round",
+      status: "open",
+      notes: "Aggregate limit for all catfish species",
+      icon: Fish,
+    },
+  ];
+
+  const protectedSpecies = [
+    {
+      species: "Guadalupe Bass",
+      status: "Protected",
+      reason: "State Fish of Texas - Catch & Release Only",
+      penalty: "$500-$2000 fine per violation",
     },
   ];
 
   const specialZones = [
     {
-      name: "Dam Safety Zone",
-      description: "No fishing within 200 feet of dam structure",
-      type: "Restricted",
+      zone: "Windy Point Park Area",
+      restriction: "No-Wake Zone",
+      details: "200 yards from shore. Trolling motors only.",
+      coordinates: "30.3955° N, 97.8765° W",
     },
     {
-      name: "Marina Slow-Wake Zones",
-      description: "Reduced speed limits apply near all marinas",
-      type: "Restricted",
-    },
-    {
-      name: "Public Access Areas",
-      description: "Free shore fishing available at designated parks",
-      type: "Access",
+      zone: "Dam Safety Zone",
+      restriction: "Fishing Prohibited",
+      details: "500ft radius from Mansfield Dam structure. Safety regulation.",
+      coordinates: "30.3885° N, 97.8811° W",
     },
   ];
 
-  const upcomingChanges = [
-    {
-      date: "Apr 1, 2026",
-      change: "Trout stocking program begins",
-      impact: "New daily limits apply for stocked species",
-    },
-    {
-      date: "Sep 1, 2026",
-      change: "Bass slot limit adjustment",
-      impact: "Protective slot changes to 14-18 inches",
-    },
+  const generalRules = [
+    "Valid Texas fishing license required for ages 17+",
+    "All fish must be measured with mouth closed, tail fully extended",
+    "Fish kept on stringers must be identifiable by species",
+    "Tournament organizers must obtain special event permit",
+    "Live baitfish must be purchased from licensed dealers",
+    "Trotlines, jugs, and bank poles prohibited in no-wake zones",
   ];
 
   return (
     <>
       <SEO 
-        title="Regulations - FishIQ"
-        description="Local fishing regulations and licensing information"
+        title="Regulation Engine - Apex" 
+        description="GPS-based compliance advisor with instant bag limits and plain-language regulations"
       />
       <Layout>
-        <div className="container mx-auto px-4 pt-20 md:pt-24 pb-8 max-w-4xl">
-          <div className="flex items-start justify-between mb-6">
+        <div className="container mx-auto px-4 py-6 space-y-6">
+          {/* Header */}
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-heading font-bold mb-2">Regulations</h1>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <MapPin className="h-4 w-4" />
-                <span>{currentLocation.waterbody}, {currentLocation.state}</span>
-              </div>
+              <h1 className="text-3xl font-bold apex-heading mb-1">Regulation Engine</h1>
+              <p className="text-sm text-muted-foreground">
+                Compliance Advisor • GPS-Based Rules
+              </p>
             </div>
-            <Button variant="outline" size="sm" className="gap-2">
+            <Button variant="outline" className="gap-2">
               <Download className="h-4 w-4" />
-              <span className="hidden sm:inline">Download PDF</span>
+              <span className="hidden sm:inline">Offline Mode</span>
             </Button>
           </div>
 
-          {/* License Status Banner */}
-          <Card className="tactical-card p-4 mb-6 border-success/30 bg-success/10">
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-full bg-success/20 flex items-center justify-center flex-shrink-0">
-                <Shield className="h-5 w-5 text-success" />
+          {/* Current Location Card */}
+          <Card className="apex-card p-6">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-lg bg-primary/20 border border-primary/30 flex items-center justify-center shrink-0">
+                <MapPin className="h-6 w-6 text-primary" />
               </div>
               <div className="flex-1">
-                <h3 className="font-heading font-semibold mb-1">License Valid</h3>
-                <p className="text-sm text-muted-foreground mb-2">Texas Resident Annual License • Expires Aug 31, 2026</p>
-                <Button size="sm" variant="outline" className="h-8 text-xs">
-                  View Digital License
-                </Button>
-              </div>
-            </div>
-          </Card>
-
-          {/* Active Regulations */}
-          <div className="mb-6">
-            <h2 className="text-xl font-heading font-semibold mb-4">Current Regulations</h2>
-            <div className="space-y-3">
-              {activeRegulations.map((reg, idx) => (
-                <Card key={idx} className="tactical-card p-4">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <div>
-                      <h3 className="font-heading font-semibold text-lg">{reg.species}</h3>
-                      <p className="text-sm text-muted-foreground">{reg.season}</p>
-                    </div>
-                    <Badge variant="outline" className="bg-success/20 text-success border-success/30">
-                      Open
-                    </Badge>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3 mb-3 pb-3 border-b border-border">
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Minimum Size</p>
-                      <p className="font-semibold text-primary">{reg.minSize}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Daily Bag Limit</p>
-                      <p className="font-semibold text-primary">{reg.bagLimit}</p>
-                    </div>
-                  </div>
-
-                  {reg.notes && (
-                    <div className="flex items-start gap-2 p-2 rounded bg-muted/30">
-                      <AlertCircle className="h-4 w-4 text-accent mt-0.5 flex-shrink-0" />
-                      <p className="text-xs text-foreground">{reg.notes}</p>
-                    </div>
-                  )}
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          {/* Special Zones */}
-          <div className="mb-6">
-            <h2 className="text-xl font-heading font-semibold mb-4">Special Zones</h2>
-            <div className="space-y-3">
-              {specialZones.map((zone, idx) => (
-                <Card key={idx} className="tactical-card p-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-heading font-semibold">{zone.name}</h3>
-                        <Badge 
-                          variant="outline" 
-                          className={zone.type === "Restricted" ? "bg-warning/20 text-warning border-warning/30" : "bg-primary/20 text-primary border-primary/30"}
-                        >
-                          {zone.type}
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground">{zone.description}</p>
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          {/* Upcoming Changes */}
-          <Card className="tactical-card p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <Calendar className="h-5 w-5 text-accent" />
-              <h2 className="text-xl font-heading font-semibold">Upcoming Changes</h2>
-            </div>
-            <div className="space-y-3">
-              {upcomingChanges.map((item, idx) => (
-                <div key={idx} className="flex items-start gap-4 p-3 rounded-lg bg-muted/30">
-                  <div className="text-center flex-shrink-0">
-                    <div className="text-xs text-muted-foreground">{item.date.split(' ')[0]}</div>
-                    <div className="font-semibold text-lg">{item.date.split(' ')[1].split(',')[0]}</div>
-                  </div>
-                  <div className="flex-1 pt-1">
-                    <h3 className="font-heading font-semibold mb-1">{item.change}</h3>
-                    <p className="text-sm text-muted-foreground">{item.impact}</p>
+                <div className="flex items-center gap-2 mb-2">
+                  <h3 className="font-bold text-lg">{currentLocation.water}</h3>
+                  <div className="px-2 py-0.5 rounded-full bg-success/20 border border-success/30 flex items-center gap-1">
+                    <CheckCircle2 className="h-3 w-3 text-success" />
+                    <span className="text-xs font-bold text-success">GPS LOCKED</span>
                   </div>
                 </div>
-              ))}
+                <div className="space-y-1 text-sm text-muted-foreground">
+                  <p>{currentLocation.county}, {currentLocation.state}</p>
+                  <p className="apex-data">{currentLocation.coordinates}</p>
+                </div>
+              </div>
+              <Button size="sm" variant="outline">
+                Change Location
+              </Button>
             </div>
           </Card>
 
-          {/* Offline Access Notice */}
-          <Card className="tactical-card p-4 mt-6">
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                <Fish className="h-5 w-5 text-primary" />
+          {/* Search */}
+          <div className="relative">
+            <Fish className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search species, regulations, zones..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 apex-data bg-muted/30 border-border/50"
+            />
+          </div>
+
+          {/* Tabs */}
+          <Tabs defaultValue="limits" className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="limits" className="apex-data">
+                <Fish className="h-4 w-4 mr-2" />
+                Bag Limits
+              </TabsTrigger>
+              <TabsTrigger value="zones" className="apex-data">
+                <Target className="h-4 w-4 mr-2" />
+                Special Zones
+              </TabsTrigger>
+              <TabsTrigger value="general" className="apex-data">
+                <AlertTriangle className="h-4 w-4 mr-2" />
+                General Rules
+              </TabsTrigger>
+            </TabsList>
+
+            {/* Bag Limits Tab */}
+            <TabsContent value="limits" className="mt-6 space-y-6">
+              {/* Protected Species Alert */}
+              {protectedSpecies.length > 0 && (
+                <Card className="apex-card p-6 border-destructive/30 bg-destructive/5">
+                  <div className="flex items-start gap-3">
+                    <AlertTriangle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
+                    <div>
+                      <h3 className="font-bold text-lg mb-2">Protected Species in This Water</h3>
+                      <div className="space-y-3">
+                        {protectedSpecies.map((species, idx) => (
+                          <div key={idx} className="intelligence-panel border-destructive/20">
+                            <div className="flex items-start justify-between mb-2">
+                              <div>
+                                <p className="font-bold">{species.species}</p>
+                                <p className="text-sm text-muted-foreground mt-1">{species.reason}</p>
+                              </div>
+                              <div className="px-3 py-1 rounded-full bg-destructive/20 border border-destructive/30">
+                                <span className="text-xs font-bold text-destructive">PROTECTED</span>
+                              </div>
+                            </div>
+                            <div className="text-xs text-destructive font-semibold mt-2">
+                              ⚠️ {species.penalty}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              )}
+
+              {/* Species Regulations */}
+              <Card className="apex-card p-6">
+                <h3 className="apex-heading text-sm uppercase tracking-wider text-muted-foreground mb-4">
+                  Species Bag Limits & Size Restrictions
+                </h3>
+                <div className="space-y-3">
+                  {regulations.map((reg, idx) => {
+                    const Icon = reg.icon;
+                    return (
+                      <div key={idx} className="intelligence-panel">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center gap-3">
+                            <Icon className="h-5 w-5 text-primary" />
+                            <div>
+                              <p className="font-bold text-lg">{reg.species}</p>
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
+                                <Calendar className="h-3 w-3" />
+                                <span>{reg.season}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className={`px-3 py-1 rounded-full border ${
+                            reg.status === "open" 
+                              ? "bg-success/20 border-success/30" 
+                              : "bg-destructive/20 border-destructive/30"
+                          }`}>
+                            <span className={`text-xs font-bold ${
+                              reg.status === "open" ? "text-success" : "text-destructive"
+                            }`}>
+                              {reg.status === "open" ? "OPEN" : "CLOSED"}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-4 mb-3">
+                          <div className="text-center p-3 rounded-lg bg-muted/30">
+                            <Ruler className="h-4 w-4 text-primary mx-auto mb-1" />
+                            <p className="text-xs text-muted-foreground mb-1">Min Size</p>
+                            <p className="font-bold apex-data">
+                              {reg.minSize ? `${reg.minSize}"` : "None"}
+                            </p>
+                          </div>
+                          <div className="text-center p-3 rounded-lg bg-muted/30">
+                            <Ruler className="h-4 w-4 text-primary mx-auto mb-1" />
+                            <p className="text-xs text-muted-foreground mb-1">Max Size</p>
+                            <p className="font-bold apex-data">
+                              {reg.maxSize ? `${reg.maxSize}"` : "None"}
+                            </p>
+                          </div>
+                          <div className="text-center p-3 rounded-lg bg-muted/30">
+                            <Scale className="h-4 w-4 text-primary mx-auto mb-1" />
+                            <p className="text-xs text-muted-foreground mb-1">Daily Limit</p>
+                            <p className="font-bold apex-data">{reg.dailyLimit}</p>
+                          </div>
+                        </div>
+
+                        {reg.notes && (
+                          <div className="text-sm text-muted-foreground bg-muted/20 p-3 rounded">
+                            <strong>Note:</strong> {reg.notes}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </Card>
+
+              {/* Plain Language Summary */}
+              <Card className="apex-card p-6 bg-primary/5 border-primary/20">
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                  <div>
+                    <h3 className="font-bold mb-2">Quick Compliance Summary</h3>
+                    <ul className="space-y-2 text-sm text-muted-foreground">
+                      <li>• <strong>Bass:</strong> Keep 5 fish min 14", only 1 over 24"</li>
+                      <li>• <strong>White Bass:</strong> Keep 25 fish min 10"</li>
+                      <li>• <strong>Catfish:</strong> Keep 25 fish min 12" (all species combined)</li>
+                      <li>• <strong>Guadalupe Bass:</strong> Catch & release only - state protected</li>
+                    </ul>
+                  </div>
+                </div>
+              </Card>
+            </TabsContent>
+
+            {/* Special Zones Tab */}
+            <TabsContent value="zones" className="mt-6">
+              <Card className="apex-card p-6">
+                <h3 className="apex-heading text-sm uppercase tracking-wider text-muted-foreground mb-4">
+                  Location-Specific Restrictions
+                </h3>
+                <div className="space-y-3">
+                  {specialZones.map((zone, idx) => (
+                    <div key={idx} className="intelligence-panel">
+                      <div className="flex items-start gap-3 mb-3">
+                        <MapPin className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <p className="font-bold text-lg">{zone.zone}</p>
+                            <div className="px-3 py-1 rounded-full bg-warning/20 border border-warning/30">
+                              <span className="text-xs font-bold text-warning">RESTRICTED</span>
+                            </div>
+                          </div>
+                          <p className="text-sm text-muted-foreground mb-2">{zone.details}</p>
+                          <p className="text-xs apex-data text-muted-foreground">{zone.coordinates}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 p-2 rounded bg-muted/30">
+                        <AlertTriangle className="h-4 w-4 text-warning" />
+                        <span className="text-xs font-semibold">{zone.restriction}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </TabsContent>
+
+            {/* General Rules Tab */}
+            <TabsContent value="general" className="mt-6">
+              <Card className="apex-card p-6">
+                <h3 className="apex-heading text-sm uppercase tracking-wider text-muted-foreground mb-4">
+                  General Fishing Regulations
+                </h3>
+                <div className="space-y-3">
+                  {generalRules.map((rule, idx) => (
+                    <div key={idx} className="flex items-start gap-3 p-4 rounded-lg bg-muted/30">
+                      <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                      <p className="text-sm">{rule}</p>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </TabsContent>
+          </Tabs>
+
+          {/* Quick Actions */}
+          <div className="grid md:grid-cols-2 gap-4">
+            <Button variant="outline" className="w-full justify-start gap-3 h-auto p-4">
+              <Download className="h-5 w-5 text-primary" />
+              <div className="text-left">
+                <p className="font-semibold">Download for Offline</p>
+                <p className="text-xs text-muted-foreground">Access regulations without signal</p>
               </div>
-              <div>
-                <h3 className="font-heading font-semibold mb-1">Offline Access</h3>
-                <p className="text-sm text-muted-foreground mb-3">
-                  Download regulations for offline use on the water. Always verify current rules before fishing.
-                </p>
-                <Button size="sm" variant="outline">
-                  Download for Offline
-                </Button>
+            </Button>
+            <Button variant="outline" className="w-full justify-start gap-3 h-auto p-4">
+              <MapPin className="h-5 w-5 text-primary" />
+              <div className="text-left">
+                <p className="font-semibold">Check Another Location</p>
+                <p className="text-xs text-muted-foreground">Pin-drop for future trip planning</p>
               </div>
-            </div>
-          </Card>
+            </Button>
+          </div>
         </div>
       </Layout>
     </>
