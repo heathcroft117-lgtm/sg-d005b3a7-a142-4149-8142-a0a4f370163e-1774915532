@@ -1,31 +1,36 @@
-import { Plus, MapPin, Camera, Search } from "lucide-react";
+import { Plus, MapPin, Camera, Search, BookOpen, Scale } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function QuickActionsCard() {
+  const actions = [
+    { icon: Camera, label: "Quick Log", href: "/logbook", color: "text-primary" },
+    { icon: MapPin, label: "Atlas", href: "/map", color: "text-accent" },
+    { icon: Scale, label: "Regulations", href: "/regulations", color: "text-warning" },
+    { icon: Search, label: "Species ID", href: "/species", color: "text-info" },
+  ];
+
   return (
-    <div className="tactical-card p-6">
-      <h3 className="text-lg font-heading font-semibold mb-4">Quick Actions</h3>
-      
+    <div className="apex-card p-4">
+      <h3 className="apex-heading text-sm uppercase tracking-wider text-muted-foreground mb-4">
+        Quick Actions
+      </h3>
       <div className="grid grid-cols-2 gap-3">
-        <Button variant="outline" className="h-auto flex-col gap-2 py-4">
-          <Plus className="h-5 w-5 text-primary" />
-          <span className="text-sm font-medium">Log Catch</span>
-        </Button>
-        
-        <Button variant="outline" className="h-auto flex-col gap-2 py-4">
-          <MapPin className="h-5 w-5 text-primary" />
-          <span className="text-sm font-medium">Save Spot</span>
-        </Button>
-        
-        <Button variant="outline" className="h-auto flex-col gap-2 py-4">
-          <Camera className="h-5 w-5 text-primary" />
-          <span className="text-sm font-medium">Start Trip</span>
-        </Button>
-        
-        <Button variant="outline" className="h-auto flex-col gap-2 py-4">
-          <Search className="h-5 w-5 text-primary" />
-          <span className="text-sm font-medium">Find Waters</span>
-        </Button>
+        {actions.map((action, idx) => {
+          const Icon = action.icon;
+          return (
+            <Button
+              key={idx}
+              variant="outline"
+              className="h-24 flex-col gap-2 hover:border-primary/50 hover:bg-primary/5 transition-all group"
+              asChild
+            >
+              <a href={action.href}>
+                <Icon className={`h-6 w-6 ${action.color} group-hover:scale-110 transition-transform`} />
+                <span className="text-sm font-semibold">{action.label}</span>
+              </a>
+            </Button>
+          );
+        })}
       </div>
     </div>
   );

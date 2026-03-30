@@ -1,4 +1,4 @@
-import { Moon, Sun, Clock } from "lucide-react";
+import { Moon, Sun, Clock, Circle } from "lucide-react";
 
 interface SolunarPeriod {
   type: "major" | "minor";
@@ -8,52 +8,112 @@ interface SolunarPeriod {
 }
 
 interface SolunarCardProps {
-  periods: SolunarPeriod[];
   moonPhase: string;
-  moonIllumination: number;
+  periods: SolunarPeriod[];
+  nextPeakCountdown: string;
 }
 
-export function SolunarCard({ periods, moonPhase, moonIllumination }: SolunarCardProps) {
+export function SolunarCard({ moonPhase, periods, nextPeakCountdown }: SolunarCardProps) {
+  const majorPeriods = periods.filter(p => p.type === "major");
+  const minorPeriods = periods.filter(p => p.type === "minor");
+  const activePeriod = periods.find(p => p.active);
+
   return (
-    <div className="tactical-card p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-heading font-semibold">Solunar Activity</h3>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Moon className="h-4 w-4" />
-          <span>{moonPhase}</span>
-          <span className="text-xs">({moonIllumination}%)</span>
+    <div className="apex-card-hover p-6">
+      <div className="flex items-start justify-between mb-6">
+        <div>
+          <h3 className="apex-heading text-sm uppercase tracking-wider text-muted-foreground mb-1">
+            Solunar Forecast
+          </h3>
+          <div className="flex items-center gap-2 mt-1">
+            <Moon className="h-4 w-4 text-primary" />
+            <span className="text-sm font-semibold">{moonPhase}</span>
+          </div>
         </div>
+        {activePeriod && (
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 border border-primary/30">
+            <div className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
+            <span className="text-xs font-bold apex-data text-primary">ACTIVE</span>
+          </div>
+        )}
       </div>
-      
-      <div className="space-y-3">
-        {periods.map((period, index) => (
-          <div
-            key={index}
-            className={`flex items-center gap-3 p-3 rounded-lg border ${
-              period.active 
-                ? "bg-primary/10 border-primary/30" 
-                : "bg-muted/30 border-border/50"
-            }`}
-          >
-            <div className={`p-2 rounded-full ${
-              period.type === "major" ? "bg-accent/20 text-accent" : "bg-primary/20 text-primary"
-            }`}>
-              {period.type === "major" ? <Sun className="h-4 w-4" /> : <Clock className="h-4 w-4" />}
-            </div>
-            
-            <div className="flex-1">
-              <p className="text-sm font-semibold capitalize">
-                {period.type} Period
-                {period.active && <span className="ml-2 text-xs text-primary">● Active</span>}
-              </p>
-              <p className="text-xs text-muted-foreground">{period.start} - {period.end}</p>
+
+      {nextPeakCountdown && !activePeriod && (
+        <div className="mb-6 p-4 rounded-lg bg-gradient-to-r from-primary/10 to-transparent border-l-2 border-primary">
+          <div className="flex items-center gap-3">
+            <Clock className="h-5 w-5 text-primary" />
+            <div>
+              <p className="text-xs text-muted-foreground uppercase tracking-wide">Next Peak Window</p>
+              <p className="text-xl font-bold apex-data text-primary">{nextPeakCountdown}</p>
             </div>
           </div>
-        ))}
+        </div>
+      )}
+
+      <div className="space-y-4">
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <Sun className="h-4 w-4 text-bite-peak" />
+            <span className="text-sm font-semibold">Major Periods</span>
+            <span className="text-xs apex-data text-muted-foreground">Peak Feeding</span>
+          </div>
+          <div className="space-y-2">
+            {majorPeriods.map((period, idx) => (
+              <div 
+                key={idx}
+                className={`flex items-center justify-between p-3 rounded-lg transition-all ${
+                  period.active 
+                    ? "bg-primary/20 border border-primary/30 glow-green" 
+                    : "bg-muted/30"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  {period.active ? (
+                    <div className="w-3 h-3 rounded-full bg-primary animate-bite-pulse" />
+                  ) : (
+                    <Circle className="h-3 w-3 text-muted-foreground" />
+                  )}
+                  <span className="apex-data font-semibold">{period.start}</span>
+                </div>
+                <span className="apex-data text-sm text-muted-foreground">{period.end}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <Moon className="h-4 w-4 text-bite-moderate" />
+            <span className="text-sm font-semibold">Minor Periods</span>
+            <span className="text-xs apex-data text-muted-foreground">Moderate Activity</span>
+          </div>
+          <div className="space-y-2">
+            {minorPeriods.map((period, idx) => (
+              <div 
+                key={idx}
+                className={`flex items-center justify-between p-3 rounded-lg transition-all ${
+                  period.active 
+                    ? "bg-accent/20 border border-accent/30" 
+                    : "bg-muted/30"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  {period.active ? (
+                    <div className="w-3 h-3 rounded-full bg-accent animate-pulse" />
+                  ) : (
+                    <Circle className="h-3 w-3 text-muted-foreground" />
+                  )}
+                  <span className="apex-data font-semibold">{period.start}</span>
+                </div>
+                <span className="apex-data text-sm text-muted-foreground">{period.end}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-      
-      <div className="mt-4 pt-4 border-t border-border text-sm text-muted-foreground">
-        <p>Peak feeding activity expected during major periods. Minor periods offer moderate opportunities.</p>
+
+      <div className="mt-4 pt-4 border-t border-border text-xs text-muted-foreground">
+        <p>Major periods = 60-90min peak activity. Minor periods = 30-45min moderate opportunities.</p>
       </div>
     </div>
   );
