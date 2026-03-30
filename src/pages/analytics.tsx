@@ -1,157 +1,270 @@
 import { SEO } from "@/components/SEO";
 import { Layout } from "@/components/Layout";
-import { TrendingUp, Trophy, Calendar, Target } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { StatCard } from "@/components/StatCard";
+import { TrendingUp, Fish, Target, Calendar, Zap, Droplets, Wind, Moon, Brain, Award } from "lucide-react";
 
 export default function AnalyticsPage() {
-  const topSpecies = [
-    { name: "Largemouth Bass", count: 48, avg: "3.8 lbs", success: 85 },
-    { name: "White Bass", count: 32, avg: "1.9 lbs", success: 78 },
-    { name: "Catfish", count: 18, avg: "5.2 lbs", success: 92 },
+  const stats = {
+    totalCatches: 127,
+    species: 12,
+    avgWeight: 3.8,
+    cpue: 2.4,
+    topBait: "Green Pumpkin Jig",
+    bestConditions: "Rising Pressure",
+  };
+
+  const speciesBreakdown = [
+    { species: "Largemouth Bass", catches: 45, successRate: 72, avgWeight: 4.2 },
+    { species: "Smallmouth Bass", catches: 32, successRate: 68, avgWeight: 3.1 },
+    { species: "White Bass", catches: 28, successRate: 85, avgWeight: 1.8 },
+    { species: "Crappie", catches: 22, successRate: 78, avgWeight: 1.2 },
   ];
 
-  const topBaits = [
-    { name: "Green Pumpkin Jig", catches: 28, species: "Bass" },
-    { name: "Chrome Spoon", catches: 22, species: "White Bass" },
-    { name: "Live Shad", catches: 16, species: "Catfish" },
+  const baitEfficacy = [
+    { bait: "Green Pumpkin Jig", catches: 38, waters: ["Travis", "Georgetown"], clarity: "Stained", successRate: 76 },
+    { bait: "White Crankbait", catches: 25, waters: ["Travis"], clarity: "Clear", successRate: 71 },
+    { bait: "Ned Rig", catches: 22, waters: ["Georgetown", "Austin"], clarity: "Stained", successRate: 68 },
+    { bait: "Drop Shot", catches: 18, waters: ["Travis"], clarity: "Clear", successRate: 65 },
+  ];
+
+  const timePatterns = [
+    { window: "Dawn (5-7 AM)", catches: 42, avgBiteScore: 8.2, bestSpecies: "Largemouth" },
+    { window: "Morning (7-10 AM)", catches: 35, avgBiteScore: 7.5, bestSpecies: "Smallmouth" },
+    { window: "Midday (10 AM-2 PM)", catches: 18, avgBiteScore: 5.8, bestSpecies: "White Bass" },
+    { window: "Evening (5-8 PM)", catches: 32, avgBiteScore: 7.9, bestSpecies: "Largemouth" },
   ];
 
   const insights = [
     {
-      title: "Best Time Window",
-      description: "Your highest success rate is 6-8 AM (89%)",
-      icon: TrendingUp,
-      color: "text-bite-strong",
-    },
-    {
-      title: "Top Location",
-      description: "Lake Travis - Point 7 (42 catches)",
-      icon: Target,
+      title: "Your Dominant Pattern",
+      insight: "85% of your trophy catches occur during rising barometric pressure with water temps between 65-72°F. Target these conditions aggressively.",
+      icon: Brain,
       color: "text-primary",
     },
     {
-      title: "Seasonal Peak",
-      description: "Spring months show 2.3x better CPUE",
-      icon: Calendar,
-      color: "text-accent",
+      title: "Bait Intelligence",
+      insight: "Green Pumpkin Jig outperforms all other presentations in stained water by 23%. Stock this color heavily for Lake Travis.",
+      icon: Target,
+      color: "text-success",
+    },
+    {
+      title: "Time Window Optimization",
+      insight: "Your CPUE during dawn hours is 2.3x higher than midday. Prioritize early morning trips for maximum efficiency.",
+      icon: Zap,
+      color: "text-warning",
     },
   ];
 
   return (
     <>
       <SEO 
-        title="Analytics - FishIQ"
-        description="Personal fishing analytics and insights"
+        title="Analytics - Apex" 
+        description="Personal fishing intelligence with AI-powered pattern detection and CPUE analysis"
       />
       <Layout>
-        <div className="container mx-auto px-4 pt-20 md:pt-24 pb-8 max-w-4xl">
-          <div className="mb-6">
-            <h1 className="text-3xl font-heading font-bold mb-2">Analytics</h1>
-            <p className="text-muted-foreground">Your fishing performance insights</p>
+        <div className="container mx-auto px-4 py-6 space-y-6">
+          <div>
+            <h1 className="text-3xl font-bold apex-heading mb-1">Coaching Engine</h1>
+            <p className="text-sm text-muted-foreground">
+              Personal analytics and pattern intelligence
+            </p>
           </div>
 
-          {/* Key Metrics */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <Card className="tactical-card p-4 text-center">
-              <div className="text-3xl font-heading font-bold text-primary">142</div>
-              <div className="text-xs text-muted-foreground mt-1">Total Catches</div>
-            </Card>
-            <Card className="tactical-card p-4 text-center">
-              <div className="text-3xl font-heading font-bold text-accent">28</div>
-              <div className="text-xs text-muted-foreground mt-1">Trips</div>
-            </Card>
-            <Card className="tactical-card p-4 text-center">
-              <div className="text-3xl font-heading font-bold text-bite-strong">5.1</div>
-              <div className="text-xs text-muted-foreground mt-1">CPUE</div>
-            </Card>
-            <Card className="tactical-card p-4 text-center">
-              <div className="text-3xl font-heading font-bold text-success">84%</div>
-              <div className="text-xs text-muted-foreground mt-1">Success Rate</div>
-            </Card>
+          {/* Key Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <StatCard label="Total Catches" value={stats.totalCatches} icon={Fish} />
+            <StatCard label="Species Count" value={stats.species} icon={Award} trend="up" trendValue="+2" />
+            <StatCard label="Avg Weight" value={`${stats.avgWeight}lb`} icon={TrendingUp} />
+            <StatCard label="CPUE" value={stats.cpue} subtitle="Catch/Hour" icon={Target} trend="up" trendValue="+0.3" />
           </div>
 
-          {/* Smart Insights */}
-          <Card className="tactical-card p-6 mb-6">
-            <h2 className="text-xl font-heading font-semibold mb-4">Smart Insights</h2>
-            <div className="space-y-4">
-              {insights.map((insight, idx) => {
-                const Icon = insight.icon;
-                return (
-                  <div key={idx} className="flex items-start gap-4 p-4 rounded-lg bg-muted/30">
-                    <div className={`w-10 h-10 rounded-full bg-muted flex items-center justify-center ${insight.color}`}>
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <h3 className="font-heading font-semibold mb-1">{insight.title}</h3>
-                      <p className="text-sm text-muted-foreground">{insight.description}</p>
-                    </div>
+          {/* Smart Insight Cards */}
+          <div className="grid md:grid-cols-3 gap-4">
+            {insights.map((item, idx) => {
+              const Icon = item.icon;
+              return (
+                <div key={idx} className="ai-insight">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Icon className={`h-5 w-5 ${item.color}`} />
+                    <p className="font-bold">{item.title}</p>
                   </div>
-                );
-              })}
-            </div>
-          </Card>
-
-          {/* Top Species Performance */}
-          <Card className="tactical-card p-6 mb-6">
-            <h2 className="text-xl font-heading font-semibold mb-4">Species Performance</h2>
-            <div className="space-y-3">
-              {topSpecies.map((species, idx) => (
-                <div key={idx} className="flex items-center gap-4 p-4 rounded-lg bg-muted/30">
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-heading font-semibold">{species.name}</h3>
-                      <span className="text-sm text-muted-foreground">{species.count} catches</span>
-                    </div>
-                    <div className="flex items-center gap-4 text-sm">
-                      <span className="text-muted-foreground">
-                        Avg: <span className="text-foreground font-medium">{species.avg}</span>
-                      </span>
-                      <span className="text-muted-foreground">
-                        Success: <span className="text-success font-medium">{species.success}%</span>
-                      </span>
-                    </div>
-                  </div>
+                  <p className="text-sm text-muted-foreground">{item.insight}</p>
                 </div>
-              ))}
-            </div>
-          </Card>
+              );
+            })}
+          </div>
 
-          {/* Top Baits */}
-          <Card className="tactical-card p-6 mb-6">
-            <h2 className="text-xl font-heading font-semibold mb-4">Top Baits & Lures</h2>
-            <div className="space-y-3">
-              {topBaits.map((bait, idx) => (
-                <div key={idx} className="flex items-center justify-between p-4 rounded-lg bg-muted/30">
-                  <div>
-                    <h3 className="font-heading font-semibold">{bait.name}</h3>
-                    <p className="text-sm text-muted-foreground">Best for {bait.species}</p>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-heading font-bold text-primary">{bait.catches}</div>
-                    <div className="text-xs text-muted-foreground">catches</div>
-                  </div>
+          {/* Detailed Analytics Tabs */}
+          <Tabs defaultValue="species" className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="species" className="apex-data">
+                <Fish className="h-4 w-4 mr-2" />
+                Species
+              </TabsTrigger>
+              <TabsTrigger value="bait" className="apex-data">
+                <Target className="h-4 w-4 mr-2" />
+                Bait Efficacy
+              </TabsTrigger>
+              <TabsTrigger value="time" className="apex-data">
+                <Calendar className="h-4 w-4 mr-2" />
+                Time Patterns
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="species" className="mt-6">
+              <Card className="apex-card p-6">
+                <h3 className="apex-heading text-sm uppercase tracking-wider text-muted-foreground mb-4">
+                  Species Performance Analysis
+                </h3>
+                <div className="space-y-4">
+                  {speciesBreakdown.map((species, idx) => (
+                    <div key={idx} className="intelligence-panel">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <p className="font-bold text-lg mb-1">{species.species}</p>
+                          <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                            <span className="apex-data">{species.catches} catches</span>
+                            <span>•</span>
+                            <span className="apex-data">{species.avgWeight}lb avg</span>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-2xl font-bold apex-data text-primary mb-1">
+                            {species.successRate}%
+                          </div>
+                          <div className="text-xs text-muted-foreground">Success Rate</div>
+                        </div>
+                      </div>
+                      <div className="w-full bg-muted/30 rounded-full h-2 overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-primary to-primary/60 transition-all duration-1000"
+                          style={{ width: `${species.successRate}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </Card>
+              </Card>
+            </TabsContent>
 
-          {/* Personal Bests */}
-          <Card className="tactical-card p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <Trophy className="h-5 w-5 text-accent" />
-              <h2 className="text-xl font-heading font-semibold">Personal Bests</h2>
+            <TabsContent value="bait" className="mt-6">
+              <Card className="apex-card p-6">
+                <h3 className="apex-heading text-sm uppercase tracking-wider text-muted-foreground mb-4">
+                  Bait Performance Heatmap
+                </h3>
+                <div className="space-y-4">
+                  {baitEfficacy.map((bait, idx) => (
+                    <div key={idx} className="intelligence-panel">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <p className="font-bold text-lg mb-1">{bait.bait}</p>
+                          <div className="flex flex-wrap gap-2 text-xs mb-2">
+                            {bait.waters.map((water) => (
+                              <span key={water} className="px-2 py-1 rounded bg-muted/50 apex-data">
+                                {water}
+                              </span>
+                            ))}
+                          </div>
+                          <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <Droplets className="h-3 w-3" />
+                              <span>{bait.clarity}</span>
+                            </div>
+                            <span>•</span>
+                            <span className="apex-data">{bait.catches} catches</span>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-2xl font-bold apex-data text-success mb-1">
+                            {bait.successRate}%
+                          </div>
+                          <div className="text-xs text-muted-foreground">Efficacy</div>
+                        </div>
+                      </div>
+                      <div className="w-full bg-muted/30 rounded-full h-2 overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-success to-success/60 transition-all duration-1000"
+                          style={{ width: `${bait.successRate}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="time" className="mt-6">
+              <Card className="apex-card p-6">
+                <h3 className="apex-heading text-sm uppercase tracking-wider text-muted-foreground mb-4">
+                  Time-of-Day Performance
+                </h3>
+                <div className="space-y-4">
+                  {timePatterns.map((pattern, idx) => (
+                    <div key={idx} className="intelligence-panel">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <p className="font-bold text-lg mb-1">{pattern.window}</p>
+                          <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                            <span className="apex-data">{pattern.catches} catches</span>
+                            <span>•</span>
+                            <span>Best: {pattern.bestSpecies}</span>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="flex items-center gap-1 mb-1">
+                            <Zap className="h-4 w-4 text-primary" />
+                            <span className="text-2xl font-bold apex-data text-primary">
+                              {pattern.avgBiteScore}
+                            </span>
+                          </div>
+                          <div className="text-xs text-muted-foreground">Avg Bite Score</div>
+                        </div>
+                      </div>
+                      <div className="w-full bg-muted/30 rounded-full h-2 overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-primary to-primary/60 transition-all duration-1000"
+                          style={{ width: `${(pattern.avgBiteScore / 10) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </TabsContent>
+          </Tabs>
+
+          {/* CPUE Calculator */}
+          <Card className="apex-card p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <Target className="h-5 w-5 text-primary" />
+              <h3 className="apex-heading text-sm font-bold uppercase tracking-wider">
+                CPUE Calculator
+              </h3>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div className="p-4 rounded-lg bg-gradient-to-br from-accent/20 to-accent/5 border border-accent/30">
-                <div className="text-sm text-muted-foreground mb-1">Largemouth Bass</div>
-                <div className="text-2xl font-heading font-bold text-accent">8.4 lbs</div>
-                <div className="text-xs text-muted-foreground mt-1">Mar 15, 2026 • Lake Travis</div>
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="intelligence-panel text-center">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">This Month</p>
+                <p className="text-4xl font-bold apex-data text-primary mb-1">2.8</p>
+                <div className="flex items-center justify-center gap-1 text-sm text-success">
+                  <TrendingUp className="h-4 w-4" />
+                  <span className="font-semibold">+0.5</span>
+                </div>
               </div>
-              <div className="p-4 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30">
-                <div className="text-sm text-muted-foreground mb-1">Best Day</div>
-                <div className="text-2xl font-heading font-bold text-primary">12 catches</div>
-                <div className="text-xs text-muted-foreground mt-1">Mar 22, 2026 • Morning Trip</div>
+              <div className="intelligence-panel text-center">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Last Month</p>
+                <p className="text-4xl font-bold apex-data mb-1">2.3</p>
+                <p className="text-xs text-muted-foreground mt-1">Baseline</p>
               </div>
+              <div className="intelligence-panel text-center">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">All-Time Best</p>
+                <p className="text-4xl font-bold apex-data text-bite-peak mb-1">3.2</p>
+                <p className="text-xs text-muted-foreground mt-1">April 2025</p>
+              </div>
+            </div>
+            <div className="mt-4 text-xs text-muted-foreground">
+              <p>CPUE = Catch Per Unit Effort. Higher values indicate improved efficiency and pattern mastery.</p>
             </div>
           </Card>
         </div>
