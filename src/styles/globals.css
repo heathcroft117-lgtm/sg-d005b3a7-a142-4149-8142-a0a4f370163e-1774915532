@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,91 +6,179 @@
 
 @layer base {
   :root {
-    /* shadcn color tokens - tactical fishing palette */
-    --background: 216 20% 12%;
-    --foreground: 210 40% 98%;
+    /* Apex Brand Colors - Dark Mode Native */
+    --background: 0 0% 8%;           /* Deep Obsidian #141414 */
+    --foreground: 0 0% 98%;          /* High-contrast white */
     
-    --card: 216 18% 16%;
-    --card-foreground: 210 40% 98%;
+    --card: 150 100% 8%;             /* Forest Obsidian #002B1B */
+    --card-foreground: 0 0% 98%;
     
-    --popover: 216 20% 14%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 150 100% 8%;
+    --popover-foreground: 0 0% 98%;
     
-    --primary: 174 65% 48%;
-    --primary-foreground: 216 20% 12%;
+    --primary: 142 76% 59%;          /* Neon Apex Green #4ADE80 */
+    --primary-foreground: 150 100% 8%;
     
-    --secondary: 216 15% 22%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 150 30% 15%;        /* Muted Forest */
+    --secondary-foreground: 0 0% 98%;
     
-    --muted: 216 15% 20%;
-    --muted-foreground: 210 20% 65%;
+    --muted: 150 20% 16%;
+    --muted-foreground: 0 0% 64%;
     
-    --accent: 38 90% 62%;
-    --accent-foreground: 216 20% 12%;
+    --accent: 142 76% 59%;           /* Apex Green */
+    --accent-foreground: 150 100% 8%;
     
-    --destructive: 0 62% 50%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
     
-    --border: 216 15% 24%;
-    --input: 216 15% 24%;
-    --ring: 174 65% 48%;
+    --border: 150 30% 18%;
+    --input: 150 30% 18%;
+    --ring: 142 76% 59%;
     
     --radius: 0.5rem;
     
-    /* Custom fishing app tokens */
-    --water-deep: 200 70% 35%;
-    --water-shallow: 180 60% 55%;
-    --bite-strong: 38 90% 62%;
-    --bite-moderate: 45 85% 65%;
-    --bite-weak: 210 20% 45%;
-    --success-green: 142 76% 36%;
-    --warning-amber: 38 92% 50%;
+    /* Apex Intelligence Colors */
+    --apex-obsidian: 150 100% 8%;         /* #002B1B */
+    --apex-green: 142 76% 59%;            /* #4ADE80 */
+    --apex-green-glow: 142 76% 69%;       /* Brighter for glows */
+    --apex-warning: 38 92% 50%;           /* Amber */
+    --apex-danger: 0 84% 60%;             /* Red */
+    --apex-info: 199 89% 48%;             /* Cyan */
     
-    /* Tactical gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(200 30% 18%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(var(--card)) 0%, hsl(216 18% 14%) 100%);
-    --gradient-bite: linear-gradient(90deg, hsl(var(--bite-strong)) 0%, hsl(var(--accent)) 100%);
+    /* Bite Score Gradient */
+    --bite-gradient-low: 0 84% 60%;       /* Red */
+    --bite-gradient-mid: 45 93% 47%;      /* Orange */
+    --bite-gradient-high: 142 76% 59%;    /* Apex Green */
+    
+    /* Data Visualization */
+    --chart-1: 142 76% 59%;
+    --chart-2: 199 89% 48%;
+    --chart-3: 262 83% 58%;
+    --chart-4: 38 92% 50%;
+    --chart-5: 340 82% 52%;
   }
-  
+
+  .dark {
+    /* Already dark mode native - no changes needed */
+  }
+}
+
+@layer base {
   * {
     @apply border-border;
   }
   
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground font-sans;
     font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-heading;
+  /* Apex Data Typography */
+  .apex-data {
+    @apply font-mono tracking-tight;
+  }
+  
+  .apex-heading {
+    @apply font-sans font-bold tracking-tight;
+  }
+  
+  /* High-contrast data text */
+  .data-display {
+    @apply font-mono text-foreground font-semibold;
+  }
+  
+  /* Coordinates display */
+  .coordinates {
+    @apply font-mono text-sm text-muted-foreground tracking-wider;
+  }
+}
+
+@layer components {
+  /* Apex Tactical Cards */
+  .apex-card {
+    @apply bg-card border border-border/50 rounded-xl backdrop-blur-sm transition-all duration-300;
+  }
+  
+  .apex-card-hover {
+    @apply apex-card hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10;
+  }
+  
+  /* Apex Glow Effects */
+  .apex-glow {
+    @apply shadow-lg shadow-primary/20;
+  }
+  
+  .apex-glow-strong {
+    @apply shadow-xl shadow-primary/30;
+  }
+  
+  /* Intelligence Panels */
+  .intelligence-panel {
+    @apply bg-gradient-to-br from-card via-card to-secondary/30 border border-primary/20 rounded-lg p-4;
+  }
+  
+  /* Bite Score Display */
+  .bite-score-ring {
+    @apply relative rounded-full aspect-square flex items-center justify-center;
+  }
+  
+  /* Data Grid Pattern */
+  .data-grid {
+    @apply grid gap-3;
+  }
+  
+  /* Tactical Buttons */
+  .apex-btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 font-bold tracking-wide shadow-lg hover:shadow-xl transition-all duration-200 active:scale-95;
+  }
+  
+  .apex-btn-ghost {
+    @apply hover:bg-primary/10 hover:text-primary transition-colors duration-200;
+  }
+  
+  /* AI Insight Cards */
+  .ai-insight {
+    @apply bg-gradient-to-r from-primary/10 via-transparent to-transparent border-l-2 border-primary p-4 rounded-lg;
+  }
+  
+  /* Heatmap Cells */
+  .heatmap-cell {
+    @apply rounded transition-all duration-300 cursor-pointer hover:scale-105;
+  }
+  
+  /* Structure Overlay */
+  .structure-overlay {
+    @apply absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-primary/10 pointer-events-none;
+  }
+  
+  /* Tournament Verification Badge */
+  .verification-badge {
+    @apply inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-mono font-semibold;
   }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  /* Apex Glow Utilities */
+  .glow-green {
+    box-shadow: 0 0 20px rgba(74, 222, 128, 0.3), 0 0 40px rgba(74, 222, 128, 0.1);
   }
   
-  .bite-ring {
-    @apply relative inline-flex items-center justify-center;
+  .glow-green-strong {
+    box-shadow: 0 0 30px rgba(74, 222, 128, 0.5), 0 0 60px rgba(74, 222, 128, 0.2);
   }
   
-  .bite-ring::before {
-    @apply absolute inset-0 rounded-full border-4 border-accent/20;
-    content: '';
+  /* Glass Morphism */
+  .glass {
+    @apply bg-card/80 backdrop-blur-md border border-border/30;
   }
   
-  .bite-ring::after {
-    @apply absolute inset-0 rounded-full border-4 border-accent border-t-transparent animate-spin;
-    content: '';
-    animation-duration: 3s;
-  }
-  
-  .tactical-card {
-    @apply bg-gradient-to-b from-card to-card/95 backdrop-blur-sm border border-border/50 rounded-lg shadow-lg;
-  }
-  
-  .action-fab {
-    @apply fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-200 active:scale-95;
+  /* Tactical Grid */
+  .tactical-grid {
+    background-image: 
+      linear-gradient(to right, rgb(74 222 128 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(74 222 128 / 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
   }
 }

@@ -1,4 +1,5 @@
-import Head from 'next/head';
+import Head from "next/head";
+import { Fragment } from "react";
 
 interface SEOProps {
   title?: string;
@@ -7,61 +8,54 @@ interface SEOProps {
   url?: string;
 }
 
-// SEO elements that can be used in _document.tsx (returns JSX without Head wrapper)
 export function SEOElements({
-  title = "Hello World",
-  description = "Welcome to my app",
+  title = "Apex | The Intelligent Fishing Co-Pilot",
+  description = "Transform raw fishing data into angler wisdom. Precision forecasting, AI-powered catch logging, and tactical intelligence for serious anglers.",
   image = "/og-image.png",
-  url,
+  url = "https://apex.fishing",
 }: SEOProps) {
   return (
-    <>
+    <Fragment>
       <title>{title}</title>
       <meta name="description" content={description} />
-      <link rel="icon" href="/favicon.ico" />
-
-      {/* Open Graph */}
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={url} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      {image && <meta property="og:image" content={image} />}
-      {url && <meta property="og:url" content={url} />}
-      <meta property="og:type" content="website" />
-
-      {/* Twitter */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      {image && <meta name="twitter:image" content={image} />}
-    </>
+      <meta property="og:image" content={image} />
+      <meta property="twitter:card" content="summary_large_image" />
+      <meta property="twitter:url" content={url} />
+      <meta property="twitter:title" content={title} />
+      <meta property="twitter:description" content={description} />
+      <meta property="twitter:image" content={image} />
+      <meta name="theme-color" content="#002B1B" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+      <link rel="icon" href="/favicon.ico" />
+    </Fragment>
   );
 }
 
-// SEO component for use in pages/_app.tsx or individual pages (uses next/head)
-// Note: Flattened structure (no fragment) for better Next.js Head compatibility during hot reload
 export function SEO({
-  title = "Hello World",
-  description = "Welcome to my app",
+  title = "Apex | The Intelligent Fishing Co-Pilot",
+  description = "Transform raw fishing data into angler wisdom. Precision forecasting, AI-powered catch logging, and tactical intelligence for serious anglers.",
   image = "/og-image.png",
-  url,
+  url = "https://apex.fishing",
 }: SEOProps) {
   return (
     <Head>
       <title>{title}</title>
       <meta name="description" content={description} />
-      <link rel="icon" href="/favicon.ico" />
-
-      {/* Open Graph */}
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={url} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      {image && <meta property="og:image" content={image} />}
-      {url && <meta property="og:url" content={url} />}
-      <meta property="og:type" content="website" />
-
-      {/* Twitter */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      {image && <meta name="twitter:image" content={image} />}
+      <meta property="og:image" content={image} />
+      <meta property="twitter:card" content="summary_large_image" />
+      <meta property="twitter:url" content={url} />
+      <meta property="twitter:title" content={title} />
+      <meta property="twitter:description" content={description} />
+      <meta property="twitter:image" content={image} />
+      <meta name="theme-color" content="#002B1B" />
     </Head>
   );
 }
