@@ -10,6 +10,7 @@ import ContactSection from '@/components/plumbing/ContactSection';
 import Footer from '@/components/plumbing/Footer';
 import ScrollPipe from '@/components/plumbing/ScrollPipe';
 import CookieConsent from '@/components/plumbing/CookieConsent';
+import CinematicStages from '@/components/plumbing/CinematicStages';
 
 export default function HomePage() {
   return (
@@ -45,7 +46,10 @@ export default function HomePage() {
           {/* 5. Why choose us + reviews */}
           <WhyChooseUs />
 
-          {/* 6. Contact & booking form */}
+          {/* 6. Cinematic 5-stage scroll experience */}
+          <CinematicStages />
+
+          {/* 7. Contact & booking form */}
           <ContactSection />
         </main>
 
