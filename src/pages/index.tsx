@@ -9,6 +9,7 @@ import StatsSection from '@/components/plumbing/StatsSection';
 import ContactSection from '@/components/plumbing/ContactSection';
 import Footer from '@/components/plumbing/Footer';
 import ScrollPipe from '@/components/plumbing/ScrollPipe';
+import CookieConsent from '@/components/plumbing/CookieConsent';
 
 export default function HomePage() {
   return (
@@ -50,6 +51,9 @@ export default function HomePage() {
 
         {/* Footer */}
         <Footer />
+
+        {/* Cookie consent banner */}
+        <CookieConsent />
       </div>
     </>
   );
