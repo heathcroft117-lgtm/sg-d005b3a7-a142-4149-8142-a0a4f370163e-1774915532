@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 const serviceAreas = [
   'Mississauga', 'Port Credit', 'Streetsville', 'Erin Mills',
@@ -6,10 +6,11 @@ const serviceAreas = [
 ];
 
 const quickLinks = [
-  { label: 'Services', href: '#services' },
-  { label: 'Why Choose Us', href: '#why-us' },
-  { label: 'Reviews', href: '#reviews' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Services', href: '#services', external: false },
+  { label: 'Why Choose Us', href: '#why-us', external: false },
+  { label: 'Reviews', href: '#reviews', external: false },
+  { label: 'Contact', href: '#contact', external: false },
+  { label: 'Privacy Policy', href: '/privacy-policy', external: true },
 ];
 
 export default function Footer() {
@@ -37,7 +38,7 @@ export default function Footer() {
                 className="w-10 h-10 rounded-xl flex items-center justify-center"
                 style={{ background: 'linear-gradient(135deg, #e8602c, #f5a623)' }}
               >
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
                   <path d="M3 12h4m10 0h4M7 12a5 5 0 0 1 10 0" />
                   <circle cx="12" cy="12" r="2" fill="white" stroke="none" />
                   <path d="M12 2v3m0 14v3" />
@@ -63,9 +64,9 @@ export default function Footer() {
 
             {/* Stars */}
             <div className="flex items-center gap-2 mt-1">
-              <div className="flex gap-0.5">
+              <div className="flex gap-0.5" aria-label="5 out of 5 stars">
                 {[1,2,3,4,5].map(s => (
-                  <svg key={s} width="14" height="14" viewBox="0 0 24 24" fill="#f5a623">
+                  <svg key={s} width="14" height="14" viewBox="0 0 24 24" fill="#f5a623" aria-hidden="true">
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                   </svg>
                 ))}
@@ -86,15 +87,27 @@ export default function Footer() {
             <ul className="flex flex-col gap-2.5">
               {quickLinks.map(link => (
                 <li key={link.label}>
-                  <button
-                    onClick={() => scrollTo(link.href)}
-                    className="text-sm font-medium transition-colors text-left"
-                    style={{ color: 'rgba(249,246,240,0.65)', fontFamily: "'DM Sans', sans-serif" }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = '#f5a623'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(249,246,240,0.65)'; }}
-                  >
-                    {link.label}
-                  </button>
+                  {link.external ? (
+                    <Link
+                      href={link.href}
+                      className="text-sm font-medium transition-colors"
+                      style={{ color: 'rgba(249,246,240,0.65)', fontFamily: "'DM Sans', sans-serif" }}
+                      onMouseEnter={(e) => { e.currentTarget.style.color = '#f5a623'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(249,246,240,0.65)'; }}
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => scrollTo(link.href)}
+                      className="text-sm font-medium transition-colors text-left"
+                      style={{ color: 'rgba(249,246,240,0.65)', fontFamily: "'DM Sans', sans-serif" }}
+                      onMouseEnter={(e) => { e.currentTarget.style.color = '#f5a623'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(249,246,240,0.65)'; }}
+                    >
+                      {link.label}
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
@@ -111,7 +124,7 @@ export default function Footer() {
             <ul className="flex flex-col gap-2">
               {serviceAreas.map(area => (
                 <li key={area} className="flex items-center gap-1.5">
-                  <span className="w-1 h-1 rounded-full bg-orange-400" style={{ backgroundColor: '#e8602c' }} />
+                  <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: '#e8602c' }} aria-hidden="true" />
                   <span className="text-sm" style={{ color: 'rgba(249,246,240,0.65)', fontFamily: "'DM Sans', sans-serif" }}>
                     {area}
                   </span>
@@ -123,10 +136,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div
-        style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}
-        className="py-5"
-      >
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }} className="py-5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap justify-between items-center gap-3 text-xs" style={{ color: 'rgba(249,246,240,0.4)', fontFamily: "'DM Sans', sans-serif" }}>
             <span>© 2025 Mahmoud Plumbing · All rights reserved</span>
@@ -140,6 +150,10 @@ export default function Footer() {
               <a href="tel:4372186580" style={{ color: 'rgba(249,246,240,0.6)' }} className="hover:text-white transition-colors">
                 (437) 218-6580
               </a>
+              <span>·</span>
+              <Link href="/privacy-policy" className="transition-colors hover:text-white" style={{ color: 'rgba(249,246,240,0.6)' }}>
+                Privacy Policy
+              </Link>
             </div>
           </div>
         </div>

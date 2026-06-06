@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 
 const COOKIE_KEY = 'mahmoud_cookie_consent';
 
@@ -103,7 +104,16 @@ export default function CookieConsent() {
                         aria-controls="cookie-details"
                       >
                         {showDetails ? 'Hide details' : 'Learn more'}
-                      </button>
+                      </button>{' '}·{' '}
+                      <Link
+                        href="/privacy-policy"
+                        className="underline transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 rounded"
+                        style={{ color: 'rgba(249,246,240,0.55)' }}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Privacy Policy
+                      </Link>
                     </p>
 
                     {/* Expandable details */}
